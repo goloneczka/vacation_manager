@@ -16,7 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class
+SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String ADMIN = "ADMIN";
     private final String password;
@@ -48,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf().disable()
+           //     .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole(ADMIN)
                 .antMatchers("/").permitAll()

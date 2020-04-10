@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
 
+    @GetMapping("/")
+    public String getRunApp() {
+        return "Empty.JSON";
+    }
+
     @GetMapping("/logos")
     public String getAdmin() {
         return "Empty.JSON";
