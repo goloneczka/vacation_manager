@@ -23,6 +23,7 @@
   <packaging>pom</packaging>
 
   <properties>
+    <release>13</release>
     <java.version>13</java.version>
     <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
     <spring-framework-bom.version>5.2.4.RELEASE</spring-framework-bom.version>
