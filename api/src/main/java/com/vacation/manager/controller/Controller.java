@@ -9,7 +9,7 @@ public class Controller {
 
     @GetMapping("/")
     public String getRunApp() {
-        return "Empty.JSON";
+        return "Empty.JSON 123";
     }
 
     @GetMapping("/logos")
