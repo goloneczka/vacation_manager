@@ -6,7 +6,7 @@ application:
 # Database Properties
 spring:
   datasource:
-    url: "postgres://fjaqxqumbggtae:1dbc7cb06cf730d931338f447074bf325f242304ca860ea02955c3e23fc6cf13@ec2-54-228-251-117.eu-west-1.compute.amazonaws.com:5432/dbilv4av8iko27"
+    jdbc-url: "postgres://fjaqxqumbggtae:1dbc7cb06cf730d931338f447074bf325f242304ca860ea02955c3e23fc6cf13@ec2-54-228-251-117.eu-west-1.compute.amazonaws.com:5432/dbilv4av8iko27"
     username: "fjaqxqumbggtae"
     password: "1dbc7cb06cf730d931338f447074bf325f242304ca860ea02955c3e23fc6cf13"
 
