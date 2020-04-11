@@ -1,1 +1,1 @@
-web: java -Dserver.port=8080 -Xms512M -jar api/target/api.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar api/target/api.jar
