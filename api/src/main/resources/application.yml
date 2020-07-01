@@ -1,23 +1,20 @@
-application:
-  admin:
-    password: "{bcrypt}$2a$10$N7tHgHhjvt.4AsnW9nMqduLrYLdKFEsP5GKBUPdeIB5emQ5Uz5nlC"
+
+## Database Properties
+#spring:
+#  datasource:
+#    driver-class-name: "org.postgresql.Driver"
+#    jdbc-url: "jdbc:postgresql://ec2-54-228-251-117.eu-west-1.compute.amazonaws.com:5432/dbilv4av8iko27"
+#    username: "fjaqxqumbggtae"
+#    password: "1dbc7cb06cf730d931338f447074bf325f242304ca860ea02955c3e23fc6cf13"
+#
+
+server:
+  port: 8081
 
 
 # Database Properties
 spring:
   datasource:
-    driver-class-name: "org.postgresql.Driver"
-    jdbc-url: "jdbc:postgresql://ec2-54-228-251-117.eu-west-1.compute.amazonaws.com:5432/dbilv4av8iko27"
-    username: "fjaqxqumbggtae"
-    password: "1dbc7cb06cf730d931338f447074bf325f242304ca860ea02955c3e23fc6cf13"
-
-  # Hibernate Properties
-  # The SQL dialect makes Hibernate generate better SQL for the chosen database
-  jpa:
-    properties:
-      hibernate:
-        dialect: "org.hibernate.dialect.PostgreSQLDialect"
-
-        # Hibernate ddl auto (create, create-drop, validate, update)
-        ddl-auto: "update"
-
+    url: "jdbc:postgresql://localhost:3307/vacation-manager-test"
+    username: "postgres"
+    password: "klopek1432"

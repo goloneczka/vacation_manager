@@ -6,6 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>api</module>
+        <module>database</module>
     </modules>
 
     <parent>
@@ -29,20 +30,35 @@
     <spring-framework-bom.version>5.2.4.RELEASE</spring-framework-bom.version>
     <org.postgresql.version>9.4.1212</org.postgresql.version>
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+    <jooq.version>3.13.1</jooq.version>
+    <model-mapper.version>2.3.7</model-mapper.version>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.modelmapper</groupId>
+        <artifactId>modelmapper</artifactId>
+        <version>${model-mapper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-meta</artifactId>
+        <version>${jooq.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
+      </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-framework-bom</artifactId>
