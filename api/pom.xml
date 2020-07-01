@@ -46,6 +46,20 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vacation.manager</groupId>
+            <artifactId>database</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

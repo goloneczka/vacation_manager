@@ -3,19 +3,19 @@ package com.vacation.manager.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
-@Entity
-@Table(name = "enterprise", schema = "enterprises")
+
 @Data
 public class Enterprise {
 
-    @Id
     private Long id;
     private String name;
     private Integer freeDays;
+
+    @OneToMany(mappedBy="enterprise")
+    private Set<Worker> workers;
 
     public Enterprise() { }
 }

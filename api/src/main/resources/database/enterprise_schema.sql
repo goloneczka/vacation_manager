@@ -6,4 +6,3 @@ CREATE TABLE IF NOT EXISTS enterprises.enterprise
     free_days             real not null
 );
 
-insert into enterprises.enterprise(name, free_days) values('test1', 25);
