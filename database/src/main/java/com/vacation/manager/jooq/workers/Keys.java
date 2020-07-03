@@ -60,7 +60,7 @@ public class Keys {
     private static class UniqueKeys0 {
         public static final UniqueKey<RoleRecord> ROLE_PKEY = Internal.createUniqueKey(Role.ROLE, "role_pkey", new TableField[] { Role.ROLE.ID }, true);
         public static final UniqueKey<WorkerRecord> WORKER_PKEY = Internal.createUniqueKey(Worker.WORKER, "worker_pkey", new TableField[] { Worker.WORKER.ID }, true);
-        public static final UniqueKey<WorkerRecord> WORKER_USERNAME_ENTERPRISE_ID_KEY = Internal.createUniqueKey(Worker.WORKER, "worker_username_enterprise_id_key", new TableField[] { Worker.WORKER.USERNAME, Worker.WORKER.ENTERPRISE_ID }, true);
+        public static final UniqueKey<WorkerRecord> WORKER_USERNAME_ENTERPRISE_ID_KEY = Internal.createUniqueKey(Worker.WORKER, "worker_username_enterprise_id_key", new TableField[] { Worker.WORKER.EMAIL, Worker.WORKER.ENTERPRISE_ID }, true);
     }
 
     private static class ForeignKeys0 {

@@ -1,21 +1,17 @@
-package com.vacation.manager.model;
+package com.vacation.manager.model.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Worker {
+public class RegisterForm {
 
-
-    private Long id;
-    private String email;
-    private String password;
     private String name;
+    private String email;
+    private String enterpriseName;
+    private String password;
     private String occupation;
-    private Long enterpriseId;
 
-
-    public Worker() { }
-
+    public RegisterForm() { }
 }

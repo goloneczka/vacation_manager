@@ -31,16 +31,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Worker> worker = workerRepository.findByUsername(username);
-        if (worker.isEmpty()) throw new UsernameNotFoundException(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Worker> worker = workerRepository.findByEmail(email);
+        if (worker.isEmpty()) throw new UsernameNotFoundException(email);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : workerRepository.getUserRoles(username)){
+        for (Role role : workerRepository.getUserRoles(email)){
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
-        return new org.springframework.security.core.userdetails.User(worker.get().getUsername(), worker.get().getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(worker.get().getEmail(), worker.get().getPassword(), grantedAuthorities);
     }
 
 }

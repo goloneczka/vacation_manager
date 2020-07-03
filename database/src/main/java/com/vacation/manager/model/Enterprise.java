@@ -11,7 +11,7 @@ import java.util.Set;
 public class Enterprise {
 
     private Long id;
-    private String name;
+    private String enterpriseName;
     private Integer freeDays;
 
     @OneToMany(mappedBy="enterprise")

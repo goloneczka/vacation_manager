@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Enterprise extends TableImpl<EnterpriseRecord> {
 
-    private static final long serialVersionUID = -457335757;
+    private static final long serialVersionUID = 1573612126;
 
     /**
      * The reference instance of <code>enterprises.enterprise</code>
@@ -53,14 +53,14 @@ public class Enterprise extends TableImpl<EnterpriseRecord> {
     public final TableField<EnterpriseRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('enterprises.enterprise_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>enterprises.enterprise.name</code>.
+     * The column <code>enterprises.enterprise.enterprise_name</code>.
      */
-    public final TableField<EnterpriseRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
+    public final TableField<EnterpriseRecord, String> ENTERPRISE_NAME = createField(DSL.name("enterprise_name"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
 
     /**
      * The column <code>enterprises.enterprise.free_days</code>.
      */
-    public final TableField<EnterpriseRecord, Float> FREE_DAYS = createField(DSL.name("free_days"), org.jooq.impl.SQLDataType.REAL.nullable(false), this, "");
+    public final TableField<EnterpriseRecord, Float> FREE_DAYS = createField(DSL.name("free_days"), org.jooq.impl.SQLDataType.REAL.nullable(false).defaultValue(org.jooq.impl.DSL.field("20", org.jooq.impl.SQLDataType.REAL)), this, "");
 
     /**
      * Create a <code>enterprises.enterprise</code> table reference

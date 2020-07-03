@@ -1,6 +1,7 @@
 package com.vacation.manager;
 
 
+import com.vacation.manager.repositoryP.EnterpriseRepository;
 import com.vacation.manager.repositoryP.WorkerJooqRepository;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -30,6 +31,10 @@ public class ApplicationConfiguration {
 
     @Bean
     public WorkerJooqRepository jokesRepository(DSLContext dsl) { return new WorkerJooqRepository(dsl);
+    }
+
+    @Bean
+    public EnterpriseRepository enterpriseRepository(DSLContext dsl) { return new EnterpriseRepository(dsl);
     }
 
     @Bean

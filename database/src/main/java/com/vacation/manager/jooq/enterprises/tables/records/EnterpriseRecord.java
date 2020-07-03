@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> implements Record3<Integer, String, Float> {
 
-    private static final long serialVersionUID = -1897511621;
+    private static final long serialVersionUID = -18421154;
 
     /**
      * Setter for <code>enterprises.enterprise.id</code>.
@@ -36,16 +36,16 @@ public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> impl
     }
 
     /**
-     * Setter for <code>enterprises.enterprise.name</code>.
+     * Setter for <code>enterprises.enterprise.enterprise_name</code>.
      */
-    public void setName(String value) {
+    public void setEnterpriseName(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>enterprises.enterprise.name</code>.
+     * Getter for <code>enterprises.enterprise.enterprise_name</code>.
      */
-    public String getName() {
+    public String getEnterpriseName() {
         return (String) get(1);
     }
 
@@ -93,7 +93,7 @@ public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> impl
 
     @Override
     public Field<String> field2() {
-        return Enterprise.ENTERPRISE.NAME;
+        return Enterprise.ENTERPRISE.ENTERPRISE_NAME;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> impl
 
     @Override
     public String component2() {
-        return getName();
+        return getEnterpriseName();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> impl
 
     @Override
     public String value2() {
-        return getName();
+        return getEnterpriseName();
     }
 
     @Override
@@ -139,7 +139,7 @@ public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> impl
 
     @Override
     public EnterpriseRecord value2(String value) {
-        setName(value);
+        setEnterpriseName(value);
         return this;
     }
 
@@ -171,11 +171,11 @@ public class EnterpriseRecord extends UpdatableRecordImpl<EnterpriseRecord> impl
     /**
      * Create a detached, initialised EnterpriseRecord
      */
-    public EnterpriseRecord(Integer id, String name, Float freeDays) {
+    public EnterpriseRecord(Integer id, String enterpriseName, Float freeDays) {
         super(Enterprise.ENTERPRISE);
 
         set(0, id);
-        set(1, name);
+        set(1, enterpriseName);
         set(2, freeDays);
     }
 }
