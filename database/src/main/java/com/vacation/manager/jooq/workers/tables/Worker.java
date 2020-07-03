@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Worker extends TableImpl<WorkerRecord> {
 
-    private static final long serialVersionUID = 1054766847;
+    private static final long serialVersionUID = -422702599;
 
     /**
      * The reference instance of <code>workers.worker</code>
@@ -54,9 +54,9 @@ public class Worker extends TableImpl<WorkerRecord> {
     public final TableField<WorkerRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('workers.worker_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>workers.worker.username</code>.
+     * The column <code>workers.worker.email</code>.
      */
-    public final TableField<WorkerRecord, String> USERNAME = createField(DSL.name("username"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
+    public final TableField<WorkerRecord, String> EMAIL = createField(DSL.name("email"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
 
     /**
      * The column <code>workers.worker.enterprise_id</code>.

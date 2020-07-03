@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements Record6<Integer, String, Integer, String, String, String> {
 
-    private static final long serialVersionUID = 1439568739;
+    private static final long serialVersionUID = 664664151;
 
     /**
      * Setter for <code>workers.worker.id</code>.
@@ -36,16 +36,16 @@ public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements R
     }
 
     /**
-     * Setter for <code>workers.worker.username</code>.
+     * Setter for <code>workers.worker.email</code>.
      */
-    public void setUsername(String value) {
+    public void setEmail(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>workers.worker.username</code>.
+     * Getter for <code>workers.worker.email</code>.
      */
-    public String getUsername() {
+    public String getEmail() {
         return (String) get(1);
     }
 
@@ -135,7 +135,7 @@ public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements R
 
     @Override
     public Field<String> field2() {
-        return Worker.WORKER.USERNAME;
+        return Worker.WORKER.EMAIL;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements R
 
     @Override
     public String component2() {
-        return getUsername();
+        return getEmail();
     }
 
     @Override
@@ -195,7 +195,7 @@ public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements R
 
     @Override
     public String value2() {
-        return getUsername();
+        return getEmail();
     }
 
     @Override
@@ -226,7 +226,7 @@ public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements R
 
     @Override
     public WorkerRecord value2(String value) {
-        setUsername(value);
+        setEmail(value);
         return this;
     }
 
@@ -279,11 +279,11 @@ public class WorkerRecord extends UpdatableRecordImpl<WorkerRecord> implements R
     /**
      * Create a detached, initialised WorkerRecord
      */
-    public WorkerRecord(Integer id, String username, Integer enterpriseId, String password, String name, String occupation) {
+    public WorkerRecord(Integer id, String email, Integer enterpriseId, String password, String name, String occupation) {
         super(Worker.WORKER);
 
         set(0, id);
-        set(1, username);
+        set(1, email);
         set(2, enterpriseId);
         set(3, password);
         set(4, name);
