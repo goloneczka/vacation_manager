@@ -4,10 +4,6 @@
 package com.vacation.manager.jooq;
 
 
-import com.vacation.manager.jooq.enterprises.Enterprises;
-import com.vacation.manager.jooq.leave.Leave;
-import com.vacation.manager.jooq.workers.Workers;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,7 +17,7 @@ import org.jooq.impl.CatalogImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultCatalog extends CatalogImpl {
 
-    private static final long serialVersionUID = -1680380643;
+    private static final long serialVersionUID = -1806556702;
 
     /**
      * The reference instance of <code>DEFAULT_CATALOG</code>
@@ -29,19 +25,9 @@ public class DefaultCatalog extends CatalogImpl {
     public static final DefaultCatalog DEFAULT_CATALOG = new DefaultCatalog();
 
     /**
-     * The schema <code>enterprises</code>.
+     * The schema <code>company</code>.
      */
-    public final Enterprises ENTERPRISES = Enterprises.ENTERPRISES;
-
-    /**
-     * The schema <code>leave</code>.
-     */
-    public final Leave LEAVE = Leave.LEAVE;
-
-    /**
-     * The schema <code>workers</code>.
-     */
-    public final Workers WORKERS = Workers.WORKERS;
+    public final Company COMPANY = Company.COMPANY;
 
     /**
      * No further instances allowed
@@ -53,8 +39,6 @@ public class DefaultCatalog extends CatalogImpl {
     @Override
     public final List<Schema> getSchemas() {
         return Arrays.<Schema>asList(
-            Enterprises.ENTERPRISES,
-            Leave.LEAVE,
-            Workers.WORKERS);
+            Company.COMPANY);
     }
 }

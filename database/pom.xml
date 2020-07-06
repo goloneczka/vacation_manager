@@ -41,6 +41,10 @@
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -76,13 +80,7 @@
                             <excludes></excludes>
                             <schemata>
                                 <schema>
-                                    <inputSchema>enterprises</inputSchema>
-                                </schema>
-                                <schema>
-                                    <inputSchema>leave</inputSchema>
-                                </schema>
-                                <schema>
-                                    <inputSchema>workers</inputSchema>
+                                    <inputSchema>company</inputSchema>
                                 </schema>
                             </schemata>
 
