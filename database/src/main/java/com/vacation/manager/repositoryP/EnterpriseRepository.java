@@ -2,7 +2,9 @@ package com.vacation.manager.repositoryP;
 
 import com.vacation.manager.model.Enterprise;
 import org.jooq.DSLContext;
-import static com.vacation.manager.jooq.enterprises.tables.Enterprise.ENTERPRISE;
+
+import static com.vacation.manager.jooq.tables.Enterprise.ENTERPRISE;
+
 import java.util.Optional;
 
 public class EnterpriseRepository {
@@ -13,11 +15,16 @@ public class EnterpriseRepository {
         this.dsl = dsl;
     }
 
-    public Optional<Enterprise> createEnterprise(Enterprise enterprise){
-        var result = dsl.insertInto(ENTERPRISE)
-                .set(ENTERPRISE.ENTERPRISE_NAME, enterprise.getEnterpriseName())
-                .returning()
-                .fetchOne();
-        return Optional.ofNullable(result.into(Enterprise.class));
+    public Optional<Enterprise> createEnterprise(Enterprise enterprise) {
+        try {
+            return Optional.ofNullable(dsl.insertInto(ENTERPRISE)
+                    .set(ENTERPRISE.ENTERPRISE_NAME, enterprise.getEnterpriseName())
+                    .returning()
+                    .fetchOne()
+                    .into(Enterprise.class));
+        } catch (RuntimeException runtimeException) {
+            return Optional.empty();
+        }
+
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnterpriseService {
 
-    private EnterpriseRepository enterpriseRepository;
+    private final EnterpriseRepository enterpriseRepository;
 
     public EnterpriseService(EnterpriseRepository enterpriseRepository) {
         this.enterpriseRepository = enterpriseRepository;
@@ -19,7 +19,7 @@ public class EnterpriseService {
 
     public Enterprise createEnterprise(Enterprise enterprise) {
         return enterpriseRepository.createEnterprise(enterprise)
-                .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.CREATE_FAILURE).build());
+                .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.CREATE_FAILURE_DUPLICATED_KEY).build());
     }
 
 

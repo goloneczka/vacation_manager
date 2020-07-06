@@ -8,9 +8,9 @@ import org.jooq.DSLContext;
 import java.util.List;
 import java.util.Optional;
 
-import static com.vacation.manager.jooq.workers.tables.Role.ROLE;
-import static com.vacation.manager.jooq.workers.tables.RoleWorker.ROLE_WORKER;
-import static com.vacation.manager.jooq.workers.tables.Worker.WORKER;
+import static com.vacation.manager.jooq.tables.Role.ROLE;
+import static com.vacation.manager.jooq.tables.RoleWorker.ROLE_WORKER;
+import static com.vacation.manager.jooq.tables.Worker.WORKER;
 
 public class WorkerJooqRepository {
 

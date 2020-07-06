@@ -1,7 +1,6 @@
 package com.vacation.manager.controller;
 
 import com.vacation.manager.model.Worker;
-import com.vacation.manager.response.ResponseStatus;
 import com.vacation.manager.service.EnterpriseService;
 import com.vacation.manager.service.WorkersService;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,6 @@ public class WorkerController {
 
     @GetMapping("/register")
     public ResponseEntity<Worker> register(Worker worker) {
-        return ResponseEntity.status(ResponseStatus.OK).body(workersService.createWorker(worker));
+        return ResponseEntity.ok().body(workersService.createWorker(worker));
     }
 }
