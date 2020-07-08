@@ -1,4 +1,4 @@
-package com.vacation.manager.repositoryP;
+package com.vacation.manager.repository;
 
 import com.vacation.manager.model.Enterprise;
 import org.jooq.DSLContext;

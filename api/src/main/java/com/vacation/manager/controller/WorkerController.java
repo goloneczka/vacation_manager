@@ -4,24 +4,28 @@ import com.vacation.manager.model.Worker;
 import com.vacation.manager.service.EnterpriseService;
 import com.vacation.manager.service.WorkersService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/worker")
+@RequestMapping("/workers")
 public class WorkerController {
 
-    EnterpriseService enterpriseService;
     WorkersService workersService;
 
     public WorkerController(EnterpriseService enterpriseService, WorkersService workersService) {
-        this.enterpriseService = enterpriseService;
         this.workersService = workersService;
     }
 
-    @GetMapping("/register")
-    public ResponseEntity<Worker> register(Worker worker) {
+    @PostMapping()
+    public ResponseEntity<Worker> registerWorker(Worker worker) {
         return ResponseEntity.ok().body(workersService.createWorker(worker));
+    }
+
+    @GetMapping(value = "/{mail}/{enterprise}")
+    public ResponseEntity<Worker> getWorkerByEmailAndEnterprise(
+            @PathVariable String mail, @PathVariable String enterprise) {
+        return ResponseEntity.ok().body(workersService.getWorkerByEmailAndEnterprise(mail, enterprise));
     }
 }

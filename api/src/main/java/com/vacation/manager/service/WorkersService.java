@@ -3,10 +3,10 @@ package com.vacation.manager.service;
 import com.vacation.manager.exception.AppExceptionBuilder;
 import com.vacation.manager.exception.messages.RolesMessages;
 import com.vacation.manager.exception.messages.WorkersMessages;
-import com.vacation.manager.model.Role;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
-import com.vacation.manager.repositoryP.WorkerJooqRepository;
+import com.vacation.manager.repository.WorkerRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,14 +16,17 @@ import java.util.stream.Collectors;
 @Service
 public class WorkersService {
 
-    private final WorkerJooqRepository workerRepository;
+    private final WorkerRepository workerRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public WorkersService(WorkerJooqRepository workerRepository) {
+    public WorkersService(WorkerRepository workerRepository, PasswordEncoder passwordEncoder) {
         this.workerRepository = workerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     public Worker createWorker(Worker worker) {
+        worker.setPassword(passwordEncoder.encode(worker.getPassword()));
         return workerRepository.createWorker(worker)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE).build());
     }
@@ -32,5 +35,12 @@ public class WorkersService {
         return rolesId.stream().map( id -> workerRepository.createRoleToWorker(workerId, id)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(RolesMessages.CREATE_FAILURE).build()))
                 .collect(Collectors.toList());
+    }
+
+    public Worker getWorkerByEmailAndEnterprise(String email, String enterprise){
+        Worker worker = workerRepository.findByEmailAndEnterprise(email, enterprise)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build());
+        worker.setRoles(workerRepository.getUserRoles(worker.getId()));
+        return worker;
     }
 }
