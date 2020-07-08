@@ -1,4 +1,4 @@
-package com.vacation.manager.repositoryP;
+package com.vacation.manager.repository;
 
 import com.vacation.manager.model.Role;
 import com.vacation.manager.model.RoleWorker;
@@ -8,29 +8,34 @@ import org.jooq.DSLContext;
 import java.util.List;
 import java.util.Optional;
 
+import static com.vacation.manager.jooq.tables.Enterprise.ENTERPRISE;
 import static com.vacation.manager.jooq.tables.Role.ROLE;
 import static com.vacation.manager.jooq.tables.RoleWorker.ROLE_WORKER;
 import static com.vacation.manager.jooq.tables.Worker.WORKER;
 
-public class WorkerJooqRepository {
+public class WorkerRepository {
 
     private final DSLContext dsl;
 
-    public WorkerJooqRepository(DSLContext dsl) {
+    public WorkerRepository(DSLContext dsl) {
         this.dsl = dsl;
     }
 
-    public Optional<Worker> findByEmail(String email){
-        return dsl.select().
-                from(WORKER)
+
+    public Optional<Worker>findByEmailAndEnterprise(String email, String enterprise) {
+        return dsl.select()
+                .from(WORKER)
+                .join(ENTERPRISE)
+                .on(ENTERPRISE.ID.eq(WORKER.ENTERPRISE_ID))
                 .where(WORKER.EMAIL.eq(email))
+                .and(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))
                 .fetchOptionalInto(Worker.class);
     }
 
-    public List<Role> getUserRoles(String username){
+    public List<Role> getUserRoles(Long id){
         return dsl.select()
                 .from(WORKER, ROLE_WORKER, ROLE)
-                .where(WORKER.ID.eq((int) (long) findByEmail(username).get().getId()))
+                .where(WORKER.ID.eq((int) (long) id))
                 .and(ROLE_WORKER.WORKER_ID.eq(WORKER.ID))
                 .and(ROLE_WORKER.ROLE_ID.eq(ROLE.ID))
                 .fetchInto(Role.class);

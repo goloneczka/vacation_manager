@@ -4,7 +4,7 @@ package com.vacation.manager.service;
 import com.vacation.manager.exception.AppExceptionBuilder;
 import com.vacation.manager.exception.messages.EnterprisesMessages;
 import com.vacation.manager.model.Enterprise;
-import com.vacation.manager.repositoryP.EnterpriseRepository;
+import com.vacation.manager.repository.EnterpriseRepository;
 import org.springframework.stereotype.Service;
 
 

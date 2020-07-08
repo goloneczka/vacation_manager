@@ -3,6 +3,9 @@ package com.vacation.manager.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
+
 @Data
 @AllArgsConstructor
 public class Worker {
@@ -14,6 +17,9 @@ public class Worker {
     private String name;
     private String occupation;
     private Long enterpriseId;
+
+
+    private List<Role> roles;
 
 
     public Worker() { }

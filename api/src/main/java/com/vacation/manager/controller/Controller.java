@@ -18,18 +18,16 @@ public class Controller {
     }
 
     @GetMapping("/")
-    public String getRunApp() {
-        return "Empty.JSON 123";
-    }
+    public String getRunApp() { return "{}"; }
 
     @GetMapping("/HR/eloo")
     public String getAdmin() {
-        return "Empty.JSON HR + ADMIN";
+        return "{}";
     }
 
     @GetMapping("/employee/eloo")
     public String getEmployee() {
-        return "Empty.JSON employee + HR + ADMIN";
+        return "{}";
     }
 
     @GetMapping("/eloo")

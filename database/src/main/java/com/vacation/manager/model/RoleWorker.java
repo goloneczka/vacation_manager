@@ -9,4 +9,7 @@ public class RoleWorker {
 
     private Integer workerId;
     private Integer roleId;
+
+    public RoleWorker() {
+    }
 }
