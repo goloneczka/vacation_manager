@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
 @EnableWebSecurity
@@ -21,11 +23,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final static String HR = "HR";
     private final static String EMPLOYEE = "EMPLOYEE";
 
+
     private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationEntryPointImpl authenticationEntryPoint;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService,
+                                 AuthenticationEntryPointImpl authenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Bean
@@ -42,24 +48,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)  {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and()
-                .sessionManagement().
-                sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http
+                .cors().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/HR/**").hasAnyRole(CEO, HR)
                 .antMatchers("/employee/**").hasAnyRole(EMPLOYEE, CEO, HR)
                 .antMatchers("/").permitAll()
-                .and().httpBasic();
+                .and()
+                .httpBasic().authenticationEntryPoint(authenticationEntryPoint);
     }
 
 }

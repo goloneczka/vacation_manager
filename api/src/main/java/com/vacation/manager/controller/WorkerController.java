@@ -1,21 +1,24 @@
 package com.vacation.manager.controller;
 
 import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.service.EnterpriseService;
 import com.vacation.manager.service.WorkersService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/workers")
 public class WorkerController {
 
-    WorkersService workersService;
+    private final WorkersService workersService;
+    private final ModelMapper modelMapper;
 
-    public WorkerController(EnterpriseService enterpriseService, WorkersService workersService) {
+    public WorkerController(WorkersService workersService, ModelMapper modelMapper) {
         this.workersService = workersService;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping()
@@ -24,8 +27,10 @@ public class WorkerController {
     }
 
     @GetMapping(value = "/{mail}/{enterprise}")
-    public ResponseEntity<Worker> getWorkerByEmailAndEnterprise(
+    public ResponseEntity<WorkerApi> getWorkerByEmailAndEnterprise(
             @PathVariable String mail, @PathVariable String enterprise) {
-        return ResponseEntity.ok().body(workersService.getWorkerByEmailAndEnterprise(mail, enterprise));
+
+        return ResponseEntity.ok()
+                .body(modelMapper.map(workersService.getWorkerByEmailAndEnterprise(mail, enterprise), WorkerApi.class));
     }
 }
