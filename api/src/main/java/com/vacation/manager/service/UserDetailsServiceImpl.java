@@ -2,6 +2,7 @@ package com.vacation.manager.service;
 
 
 
+import com.vacation.manager.exception.AppException;
 import com.vacation.manager.exception.AppExceptionBuilder;
 import com.vacation.manager.exception.messages.WorkersMessages;
 import com.vacation.manager.model.Role;
@@ -32,12 +33,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  throws UsernameNotFoundException {
         String enterprise = username.substring(username.indexOf("/") + 1);
         String mail = username.substring(0, username.indexOf("/"));
 
         Worker worker = workerRepository.findByEmailAndEnterprise(mail, enterprise)
-                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build());
+                .orElseThrow(() -> new UsernameNotFoundException(mail));
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Role role : workerRepository.getUserRoles(worker.getId())){
