@@ -1,0 +1,9 @@
+
+# Database Properties
+spring:
+  datasource:
+    driver-class-name: "org.postgresql.Driver"
+    jdbc-url: "jdbc:postgresql://ec2-176-34-123-50.eu-west-1.compute.amazonaws.com:5432/de29ad0d3pr2j0"
+    username: "bvifwwjgdcopht"
+    password: "e3f300158a68ec239c8ca1efa6ef67cfc7299292b2ac2a41348512f6d87d82a5"
+

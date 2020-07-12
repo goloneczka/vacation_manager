@@ -6,14 +6,6 @@ CREATE TABLE IF NOT EXISTS company.enterprise
     free_days             real default 20
 );
 
-CREATE TABLE IF NOT EXISTS company.paid_leave
-(
-    id                    SERIAL PRIMARY KEY,
-    start_date            date not null,
-    days                  REAL not null,
-    employee_id           INTEGER not null REFERENCES company.worker(id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS company.worker
 (
     id                    SERIAL PRIMARY KEY,
@@ -34,4 +26,12 @@ CREATE TABLE IF NOT EXISTS company.role_worker
 (
     worker_id                INTEGER references company.worker(id) ON UPDATE CASCADE ON DELETE CASCADE,
     role_id                  INTEGER references company.role(id)
+);
+
+CREATE TABLE IF NOT EXISTS company.paid_leave
+(
+    id                    SERIAL PRIMARY KEY,
+    start_date            date not null,
+    days                  REAL not null,
+    employee_id           INTEGER not null REFERENCES company.worker(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
