@@ -4,8 +4,10 @@ import com.vacation.manager.exception.AppException;
 import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.model.Worker;
 import com.vacation.manager.model.api.RegisterForm;
+import com.vacation.manager.service.EmailService;
 import com.vacation.manager.service.EnterpriseService;
 import com.vacation.manager.service.WorkersService;
+import org.apache.commons.mail.EmailException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +26,14 @@ public class EnterpriseController {
     private final EnterpriseService enterpriseService;
     private final WorkersService workersService;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
-    public EnterpriseController(EnterpriseService enterpriseService, WorkersService workersService, ModelMapper modelMapper) {
+    public EnterpriseController(EnterpriseService enterpriseService, WorkersService workersService,
+                                ModelMapper modelMapper, EmailService emailService) {
         this.enterpriseService = enterpriseService;
         this.workersService = workersService;
         this.modelMapper = modelMapper;
+        this.emailService = emailService;
     }
 
     @PostMapping("/enterprise")
@@ -39,5 +44,12 @@ public class EnterpriseController {
         tmpWorker.setEnterpriseId(enterprise.getId());
         workersService.createRoleToWorker(workersService.createWorker(tmpWorker).getId().intValue(), Arrays.asList(1, 2, 3));
         return ResponseEntity.ok().body(enterprise);
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<Enterprise> createEmail() throws EmailException {
+        emailService.sendEmailMessage();
+        return ResponseEntity.ok().body(new Enterprise());
+
     }
 }

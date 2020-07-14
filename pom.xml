@@ -32,6 +32,7 @@
     <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
     <jooq.version>3.13.1</jooq.version>
     <model-mapper.version>2.3.7</model-mapper.version>
+    <apache-email.version>1.5</apache-email.version>
   </properties>
 
 
@@ -79,6 +80,11 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter</artifactId>
         <version>${spring-boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-email</artifactId>
+        <version>${apache-email.version}</version>
       </dependency>
       <!-- Tests dependencies !-->
       <dependency>

@@ -3,6 +3,8 @@ package com.vacation.manager;
 
 import com.vacation.manager.repository.EnterpriseRepository;
 import com.vacation.manager.repository.WorkerRepository;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.HtmlEmail;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
@@ -42,6 +44,16 @@ public class ApplicationConfiguration {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         return mapper;
+    }
+
+    @Bean
+    public HtmlEmail htmlEmail(){
+        HtmlEmail mail = new HtmlEmail();
+        mail.setHostName("smtp.gmail.com");
+        mail.setSmtpPort(465);
+        mail.setSSLOnConnect(true);
+        mail.setAuthenticator(new DefaultAuthenticator("vacationmanagerapp@gmail.com", "klopek1432"));
+        return mail;
     }
 
 
