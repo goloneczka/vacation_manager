@@ -1,5 +1,5 @@
 app:
-  url: "https://vacation-app-hosting.herokuapp.com"
+  url: "https://vacation-app-front.herokuapp.com"
 
 # Database Properties
 spring:
