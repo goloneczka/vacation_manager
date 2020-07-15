@@ -54,12 +54,9 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<PaidLeaveRecord, WorkerRecord> PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY = ForeignKeys0.PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY;
-    public static final ForeignKey<PaidLeaveRecord, WorkerRecord> PAID_LEAVE__CASCADE_WORKER = ForeignKeys0.PAID_LEAVE__CASCADE_WORKER;
     public static final ForeignKey<RoleWorkerRecord, WorkerRecord> ROLE_WORKER__ROLE_WORKER_WORKER_ID_FKEY = ForeignKeys0.ROLE_WORKER__ROLE_WORKER_WORKER_ID_FKEY;
-    public static final ForeignKey<RoleWorkerRecord, WorkerRecord> ROLE_WORKER__CASCADE_WORKER = ForeignKeys0.ROLE_WORKER__CASCADE_WORKER;
     public static final ForeignKey<RoleWorkerRecord, RoleRecord> ROLE_WORKER__ROLE_WORKER_ROLE_ID_FKEY = ForeignKeys0.ROLE_WORKER__ROLE_WORKER_ROLE_ID_FKEY;
     public static final ForeignKey<WorkerRecord, EnterpriseRecord> WORKER__WORKER_ENTERPRISE_ID_FKEY = ForeignKeys0.WORKER__WORKER_ENTERPRISE_ID_FKEY;
-    public static final ForeignKey<WorkerRecord, EnterpriseRecord> WORKER__CASCADE_ENTERPRISE = ForeignKeys0.WORKER__CASCADE_ENTERPRISE;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -82,12 +79,9 @@ public class Keys {
     }
 
     private static class ForeignKeys0 {
-        public static final ForeignKey<PaidLeaveRecord, WorkerRecord> PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY = Internal.createForeignKey(Keys.WORKER_PKEY, PaidLeave.PAID_LEAVE, "paid_leave_employee_id_fkey", new TableField[] { PaidLeave.PAID_LEAVE.EMPLOYEE_ID, PaidLeave.PAID_LEAVE.EMPLOYEE_ID }, true);
-        public static final ForeignKey<PaidLeaveRecord, WorkerRecord> PAID_LEAVE__CASCADE_WORKER = Internal.createForeignKey(Keys.WORKER_PKEY, PaidLeave.PAID_LEAVE, "cascade_worker", new TableField[] { PaidLeave.PAID_LEAVE.EMPLOYEE_ID }, true);
+        public static final ForeignKey<PaidLeaveRecord, WorkerRecord> PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY = Internal.createForeignKey(Keys.WORKER_PKEY, PaidLeave.PAID_LEAVE, "paid_leave_employee_id_fkey", new TableField[] { PaidLeave.PAID_LEAVE.EMPLOYEE_ID }, true);
         public static final ForeignKey<RoleWorkerRecord, WorkerRecord> ROLE_WORKER__ROLE_WORKER_WORKER_ID_FKEY = Internal.createForeignKey(Keys.WORKER_PKEY, RoleWorker.ROLE_WORKER, "role_worker_worker_id_fkey", new TableField[] { RoleWorker.ROLE_WORKER.WORKER_ID }, true);
-        public static final ForeignKey<RoleWorkerRecord, WorkerRecord> ROLE_WORKER__CASCADE_WORKER = Internal.createForeignKey(Keys.WORKER_PKEY, RoleWorker.ROLE_WORKER, "cascade_worker", new TableField[] { RoleWorker.ROLE_WORKER.WORKER_ID }, true);
-        public static final ForeignKey<RoleWorkerRecord, RoleRecord> ROLE_WORKER__ROLE_WORKER_ROLE_ID_FKEY = Internal.createForeignKey(Keys.ROLE_PKEY, RoleWorker.ROLE_WORKER, "role_worker_role_id_fkey", new TableField[] { RoleWorker.ROLE_WORKER.ROLE_ID, RoleWorker.ROLE_WORKER.ROLE_ID }, true);
-        public static final ForeignKey<WorkerRecord, EnterpriseRecord> WORKER__WORKER_ENTERPRISE_ID_FKEY = Internal.createForeignKey(Keys.ENTERPRISE_PKEY, Worker.WORKER, "worker_enterprise_id_fkey", new TableField[] { Worker.WORKER.ENTERPRISE_ID, Worker.WORKER.ENTERPRISE_ID }, true);
-        public static final ForeignKey<WorkerRecord, EnterpriseRecord> WORKER__CASCADE_ENTERPRISE = Internal.createForeignKey(Keys.ENTERPRISE_PKEY, Worker.WORKER, "cascade_enterprise", new TableField[] { Worker.WORKER.ENTERPRISE_ID }, true);
+        public static final ForeignKey<RoleWorkerRecord, RoleRecord> ROLE_WORKER__ROLE_WORKER_ROLE_ID_FKEY = Internal.createForeignKey(Keys.ROLE_PKEY, RoleWorker.ROLE_WORKER, "role_worker_role_id_fkey", new TableField[] { RoleWorker.ROLE_WORKER.ROLE_ID }, true);
+        public static final ForeignKey<WorkerRecord, EnterpriseRecord> WORKER__WORKER_ENTERPRISE_ID_FKEY = Internal.createForeignKey(Keys.ENTERPRISE_PKEY, Worker.WORKER, "worker_enterprise_id_fkey", new TableField[] { Worker.WORKER.ENTERPRISE_ID }, true);
     }
 }

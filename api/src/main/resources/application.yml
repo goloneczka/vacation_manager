@@ -11,6 +11,8 @@
 server:
   port: 9090
 
+app:
+  url: "http://localhost:8080"
 
 # Database Properties
 spring:

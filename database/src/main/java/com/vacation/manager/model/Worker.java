@@ -17,6 +17,7 @@ public class Worker {
     private String name;
     private String occupation;
     private Long enterpriseId;
+    private Boolean confirmed;
 
 
     private List<Role> roles;

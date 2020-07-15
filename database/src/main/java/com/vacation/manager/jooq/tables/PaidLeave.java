@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PaidLeave extends TableImpl<PaidLeaveRecord> {
 
-    private static final long serialVersionUID = 1626639875;
+    private static final long serialVersionUID = 2106213036;
 
     /**
      * The reference instance of <code>company.paid_leave</code>
@@ -123,15 +123,11 @@ public class PaidLeave extends TableImpl<PaidLeaveRecord> {
 
     @Override
     public List<ForeignKey<PaidLeaveRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<PaidLeaveRecord, ?>>asList(Keys.PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY, Keys.PAID_LEAVE__CASCADE_WORKER);
+        return Arrays.<ForeignKey<PaidLeaveRecord, ?>>asList(Keys.PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY);
     }
 
-    public Worker paidLeaveEmployeeIdFkey() {
+    public Worker worker() {
         return new Worker(this, Keys.PAID_LEAVE__PAID_LEAVE_EMPLOYEE_ID_FKEY);
-    }
-
-    public Worker cascadeWorker() {
-        return new Worker(this, Keys.PAID_LEAVE__CASCADE_WORKER);
     }
 
     @Override

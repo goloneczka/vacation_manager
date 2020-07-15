@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RoleWorker extends TableImpl<RoleWorkerRecord> {
 
-    private static final long serialVersionUID = -1919649334;
+    private static final long serialVersionUID = 1028360014;
 
     /**
      * The reference instance of <code>company.role_worker</code>
@@ -95,15 +95,11 @@ public class RoleWorker extends TableImpl<RoleWorkerRecord> {
 
     @Override
     public List<ForeignKey<RoleWorkerRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RoleWorkerRecord, ?>>asList(Keys.ROLE_WORKER__ROLE_WORKER_WORKER_ID_FKEY, Keys.ROLE_WORKER__CASCADE_WORKER, Keys.ROLE_WORKER__ROLE_WORKER_ROLE_ID_FKEY);
+        return Arrays.<ForeignKey<RoleWorkerRecord, ?>>asList(Keys.ROLE_WORKER__ROLE_WORKER_WORKER_ID_FKEY, Keys.ROLE_WORKER__ROLE_WORKER_ROLE_ID_FKEY);
     }
 
-    public Worker roleWorkerWorkerIdFkey() {
+    public Worker worker() {
         return new Worker(this, Keys.ROLE_WORKER__ROLE_WORKER_WORKER_ID_FKEY);
-    }
-
-    public Worker cascadeWorker() {
-        return new Worker(this, Keys.ROLE_WORKER__CASCADE_WORKER);
     }
 
     public Role role() {

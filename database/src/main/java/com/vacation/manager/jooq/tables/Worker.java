@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Worker extends TableImpl<WorkerRecord> {
 
-    private static final long serialVersionUID = -1258589951;
+    private static final long serialVersionUID = -301196283;
 
     /**
      * The reference instance of <code>company.worker</code>
@@ -76,6 +76,11 @@ public class Worker extends TableImpl<WorkerRecord> {
      * The column <code>company.worker.occupation</code>.
      */
     public final TableField<WorkerRecord, String> OCCUPATION = createField(DSL.name("occupation"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
+
+    /**
+     * The column <code>company.worker.confirmed</code>.
+     */
+    public final TableField<WorkerRecord, Boolean> CONFIRMED = createField(DSL.name("confirmed"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * Create a <code>company.worker</code> table reference
@@ -132,15 +137,11 @@ public class Worker extends TableImpl<WorkerRecord> {
 
     @Override
     public List<ForeignKey<WorkerRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<WorkerRecord, ?>>asList(Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY, Keys.WORKER__CASCADE_ENTERPRISE);
+        return Arrays.<ForeignKey<WorkerRecord, ?>>asList(Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY);
     }
 
-    public Enterprise workerEnterpriseIdFkey() {
+    public Enterprise enterprise() {
         return new Enterprise(this, Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY);
-    }
-
-    public Enterprise cascadeEnterprise() {
-        return new Enterprise(this, Keys.WORKER__CASCADE_ENTERPRISE);
     }
 
     @Override
@@ -170,11 +171,11 @@ public class Worker extends TableImpl<WorkerRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, Integer, String, String, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<Integer, String, Integer, String, String, String, Boolean> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

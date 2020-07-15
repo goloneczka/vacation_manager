@@ -1,4 +1,4 @@
-package com.vacation.manager.exception.messages;
+package com.vacation.manager.messages;
 
 public class RolesMessages {
     public final static String NOT_FOUND = "Role not found";

@@ -1,5 +1,6 @@
 package com.vacation.manager.repository;
 
+import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.model.Role;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
@@ -22,7 +23,7 @@ public class WorkerRepository {
     }
 
 
-    public Optional<Worker>findByEmailAndEnterprise(String email, String enterprise) {
+    public Optional<Worker> findByEmailAndEnterprise(String email, String enterprise) {
         return dsl.select()
                 .from(WORKER)
                 .join(ENTERPRISE)
@@ -32,14 +33,13 @@ public class WorkerRepository {
                 .fetchOptionalInto(Worker.class);
     }
 
-    public List<Role> getUserRoles(Long id){
+    public List<Role> getUserRoles(Long id) {
         return dsl.select()
                 .from(WORKER, ROLE_WORKER, ROLE)
                 .where(WORKER.ID.eq((int) (long) id))
                 .and(ROLE_WORKER.WORKER_ID.eq(WORKER.ID))
                 .and(ROLE_WORKER.ROLE_ID.eq(ROLE.ID))
                 .fetchInto(Role.class);
-
     }
 
 
@@ -62,5 +62,16 @@ public class WorkerRepository {
                 .returning()
                 .fetchOne();
         return Optional.ofNullable(result.into(RoleWorker.class));
+    }
+
+    public Optional<Worker> confirmWorker(String mail, Long enterpriseId) {
+        return dsl
+                .update(WORKER)
+                .set(WORKER.CONFIRMED, true)
+                .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))
+                .and(WORKER.EMAIL.eq(mail))
+                .returning()
+                .fetchOptional()
+                .map(record -> record.into(Worker.class));
     }
 }
