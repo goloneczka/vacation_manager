@@ -15,6 +15,7 @@ public class Enterprise {
     private Long id;
     private String enterpriseName;
     private Integer freeDays;
+    private Boolean confirmed;
 
     @OneToMany(mappedBy="enterprise")
     private Set<Worker> workers;

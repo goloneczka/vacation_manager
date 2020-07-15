@@ -22,9 +22,26 @@ public class EnterpriseRepository {
                     .returning()
                     .fetchOne()
                     .into(Enterprise.class));
-        } catch (RuntimeException runtimeException) {
+        } catch (RuntimeException ex) {
             return Optional.empty();
         }
 
+    }
+
+    public Optional<Enterprise> confirmEnterprise(Long enterpriseId) {
+        return dsl
+                .update(ENTERPRISE)
+                .set(ENTERPRISE.CONFIRMED, true)
+                .where(ENTERPRISE.ID.eq((int) (long) enterpriseId))
+                .returning()
+                .fetchOptional()
+                .map(record -> record.into(Enterprise.class));
+
+    }
+
+    public Optional<Enterprise> getEnterprise(Long enterpriseId) {
+        return dsl.selectFrom(ENTERPRISE)
+                .where(ENTERPRISE.ID.eq((int) (long) enterpriseId))
+                .fetchOptionalInto(Enterprise.class);
     }
 }

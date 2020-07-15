@@ -1,8 +1,8 @@
 package com.vacation.manager.service;
 
 import com.vacation.manager.exception.AppExceptionBuilder;
-import com.vacation.manager.exception.messages.RolesMessages;
-import com.vacation.manager.exception.messages.WorkersMessages;
+import com.vacation.manager.messages.RolesMessages;
+import com.vacation.manager.messages.WorkersMessages;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
 import com.vacation.manager.repository.WorkerRepository;
@@ -42,5 +42,10 @@ public class WorkersService {
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build());
         worker.setRoles(workerRepository.getUserRoles(worker.getId()));
         return worker;
+    }
+
+    public Worker confirmWorker(String mail, Long enterpriseId) {
+        return workerRepository.confirmWorker(mail, enterpriseId)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_CONFIRM_FAILURE).build());
     }
 }
