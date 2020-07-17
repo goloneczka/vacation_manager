@@ -38,7 +38,7 @@ public class WorkersService {
     }
 
     public Worker getWorkerByEmailAndEnterprise(String email, String enterprise){
-        Worker worker = workerRepository.findByEmailAndEnterprise(email, enterprise)
+        Worker worker = workerRepository.findConfirmedByEmailAndEnterprise(email, enterprise)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build());
         worker.setRoles(workerRepository.getUserRoles(worker.getId()));
         return worker;

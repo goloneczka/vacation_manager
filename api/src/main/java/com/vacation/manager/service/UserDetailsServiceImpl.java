@@ -2,7 +2,6 @@ package com.vacation.manager.service;
 
 
 
-import com.vacation.manager.messages.WorkersMessages;
 import com.vacation.manager.model.Role;
 import com.vacation.manager.model.Worker;
 import com.vacation.manager.repository.WorkerRepository;
@@ -35,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String enterprise = username.substring(username.indexOf("/") + 1);
         String mail = username.substring(0, username.indexOf("/"));
 
-        Worker worker = workerRepository.findByEmailAndEnterprise(mail, enterprise)
+        Worker worker = workerRepository.findConfirmedByEmailAndEnterprise(mail, enterprise)
                 .orElseThrow(() -> new UsernameNotFoundException(mail));
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();

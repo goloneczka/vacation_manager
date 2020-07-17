@@ -10,7 +10,7 @@ public class EmailsMessages {
     public static String ACTIVATE_MESSAGE(String email, int enterpriseId, String url){
         return "<div><h3>vacation-manager-app: aktywacja konta</h3>" +
                 "<p>W celu dokonczenia rejestracji konta przejdz na podana strone " +
-                "<a href='" + url + "/newAccount/" + email + "/" + enterpriseId+ "'> link activate " +
+                "<a href='" + url + "/#/newAccount/" + email + "/" + enterpriseId+ "'> link activate " +
                 "</a></p></div>";
     }
 }

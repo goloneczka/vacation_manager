@@ -1,6 +1,5 @@
 package com.vacation.manager.repository;
 
-import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.model.Role;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
@@ -23,12 +22,13 @@ public class WorkerRepository {
     }
 
 
-    public Optional<Worker> findByEmailAndEnterprise(String email, String enterprise) {
+    public Optional<Worker> findConfirmedByEmailAndEnterprise(String email, String enterprise) {
         return dsl.select()
                 .from(WORKER)
                 .join(ENTERPRISE)
                 .on(ENTERPRISE.ID.eq(WORKER.ENTERPRISE_ID))
                 .where(WORKER.EMAIL.eq(email))
+                .and(WORKER.CONFIRMED.eq(true))
                 .and(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))
                 .fetchOptionalInto(Worker.class);
     }
