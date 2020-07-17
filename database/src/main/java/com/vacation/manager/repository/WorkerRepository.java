@@ -25,11 +25,12 @@ public class WorkerRepository {
     public Optional<Worker> findConfirmedByEmailAndEnterprise(String email, String enterprise) {
         return dsl.select()
                 .from(WORKER)
-                .join(ENTERPRISE)
-                .on(ENTERPRISE.ID.eq(WORKER.ENTERPRISE_ID))
                 .where(WORKER.EMAIL.eq(email))
                 .and(WORKER.CONFIRMED.eq(true))
-                .and(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))
+                .and(WORKER.ENTERPRISE_ID.eq(
+                        dsl.select(ENTERPRISE.ID)
+                                .from(ENTERPRISE)
+                                .where(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))))
                 .fetchOptionalInto(Worker.class);
     }
 
