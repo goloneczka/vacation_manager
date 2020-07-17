@@ -31,4 +31,9 @@ public class EnterpriseService {
                 .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.CREATE_CONFIRM_FAILURE).build());
 
     }
+
+    public Enterprise getEnterpriseById(Long id) {
+        return enterpriseRepository.getEnterprise(id)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.NOT_FOUND).build());
+    }
 }

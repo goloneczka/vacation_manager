@@ -3,6 +3,7 @@ package com.vacation.manager.controller;
 import com.vacation.manager.exception.AppException;
 import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.api.EnterpriseApi;
 import com.vacation.manager.model.api.RegisterForm;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.service.EmailService;
@@ -53,5 +54,14 @@ public class EnterpriseController {
                 .body(modelMapper.map(workersService.confirmWorker(mail, enterpriseId), WorkerApi.class));
 
     }
+
+    @GetMapping(value = "/enterprise/{Id}")
+    public ResponseEntity<EnterpriseApi> getEnterpriseById(@PathVariable Long Id) {
+        return ResponseEntity.ok()
+                .body(modelMapper.map(enterpriseService.getEnterpriseById(Id), EnterpriseApi.class));
+
+    }
+
+
 
 }
