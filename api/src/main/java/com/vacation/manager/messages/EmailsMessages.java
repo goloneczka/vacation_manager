@@ -13,4 +13,11 @@ public class EmailsMessages {
                 "<a href='" + url + "/#/newAccount/" + email + "/" + enterpriseId+ "'> link activate " +
                 "</a></p></div>";
     }
+
+    public static String ACTIVATE_EMPLOYEE_MESSAGE(String email, int enterpriseId, String url, String passwd){
+        return "<div><h3>vacation-manager-app: aktywacja konta pracownika</h3>" +
+                "<p>W celu dokonczenia rejestracji konta przejdz na podana strone " +
+                "<a href='" + url + "/#/newAccountEmployee/" + email + "/" + enterpriseId+ "'> link activate " +
+                "</a>Twoje obecne haslo to: " + passwd + " zalecamy jego zmiane</p></div>";
+    }
 }

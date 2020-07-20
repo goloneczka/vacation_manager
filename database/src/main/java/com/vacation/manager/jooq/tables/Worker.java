@@ -8,6 +8,7 @@ import com.vacation.manager.jooq.Company;
 import com.vacation.manager.jooq.Keys;
 import com.vacation.manager.jooq.tables.records.WorkerRecord;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Worker extends TableImpl<WorkerRecord> {
 
-    private static final long serialVersionUID = -301196283;
+    private static final long serialVersionUID = -1965537238;
 
     /**
      * The reference instance of <code>company.worker</code>
@@ -81,6 +82,11 @@ public class Worker extends TableImpl<WorkerRecord> {
      * The column <code>company.worker.confirmed</code>.
      */
     public final TableField<WorkerRecord, Boolean> CONFIRMED = createField(DSL.name("confirmed"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>company.worker.hired</code>.
+     */
+    public final TableField<WorkerRecord, LocalDate> HIRED = createField(DSL.name("hired"), org.jooq.impl.SQLDataType.LOCALDATE.defaultValue(org.jooq.impl.DSL.field("CURRENT_DATE", org.jooq.impl.SQLDataType.LOCALDATE)), this, "");
 
     /**
      * Create a <code>company.worker</code> table reference
@@ -171,11 +177,11 @@ public class Worker extends TableImpl<WorkerRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Integer, String, Integer, String, String, String, Boolean> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<Integer, String, Integer, String, String, String, Boolean, LocalDate> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

@@ -3,6 +3,7 @@ package com.vacation.manager.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -18,6 +19,7 @@ public class Worker {
     private String occupation;
     private Long enterpriseId;
     private Boolean confirmed;
+    private LocalDate hired;
 
 
     private List<Role> roles;
