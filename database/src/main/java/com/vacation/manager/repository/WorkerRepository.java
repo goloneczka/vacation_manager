@@ -51,6 +51,7 @@ public class WorkerRepository {
                 .set(WORKER.EMAIL, worker.getEmail())
                 .set(WORKER.PASSWORD, worker.getPassword())
                 .set(WORKER.ENTERPRISE_ID, worker.getEnterpriseId().intValue())
+                .set(WORKER.HIRED, worker.getHired())
                 .returning()
                 .fetchOne();
         return Optional.ofNullable(result.into(Worker.class));
@@ -74,5 +75,12 @@ public class WorkerRepository {
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(Worker.class));
+    }
+
+    public List<Worker> getEmployeesByEnterpriseId(Long enterpriseId) {
+        return dsl.selectFrom(WORKER)
+                .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))
+                .and(WORKER.CONFIRMED.eq(true))
+                .fetchInto(Worker.class);
     }
 }

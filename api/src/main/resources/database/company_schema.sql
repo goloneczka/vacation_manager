@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS company.enterprise
     id                    SERIAL PRIMARY KEY,
     enterprise_name       VARCHAR(127) not null UNIQUE,
     free_days             real default 20,
-    confirmed             boolean default false
+    confirmed             boolean default false,
+    hired                 date default CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS company.worker
