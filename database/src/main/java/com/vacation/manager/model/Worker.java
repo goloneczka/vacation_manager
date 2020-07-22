@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -26,5 +27,9 @@ public class Worker {
 
 
     public Worker() { }
+
+    public void setHiredFromString(String startDate1){
+        hired = LocalDate.parse(startDate1, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.vacation.manager.model.api;
+package com.vacation.manager.model.api.form;
 
 
 import lombok.AllArgsConstructor;

@@ -5,8 +5,8 @@ import com.vacation.manager.messages.RolesMessages;
 import com.vacation.manager.messages.WorkersMessages;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
-import com.vacation.manager.model.api.RegisterCompanyForm;
-import com.vacation.manager.model.api.RegisterEmployeeForm;
+import com.vacation.manager.model.api.form.RegisterCompanyForm;
+import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.WorkerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,12 +39,11 @@ public class WorkersService {
     public Worker createWorker(Worker worker) {
         worker.setPassword(passwordEncoder.encode(worker.getPassword()));
         return workerRepository.createWorker(worker)
-                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE).build());
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_DUP_KEYS).build());
     }
 
     public Worker addCeo(RegisterCompanyForm registerCompanyForm, Long enterpriseId){
         Worker tmpWorker = modelMapper.map(registerCompanyForm, Worker.class);
-        tmpWorker.setHired(registerCompanyForm.convertHireStringToLocalDate());
         tmpWorker.setEnterpriseId(enterpriseId);
         Worker worker = createWorker(tmpWorker);
         createRoleToWorker(worker.getId().intValue(), Arrays.asList(1, 2, 3));
@@ -76,9 +75,8 @@ public class WorkersService {
 
     public Worker addEmployee(RegisterEmployeeForm registerEmployeeForm) {
         Worker tmpWorker = modelMapper.map(registerEmployeeForm, Worker.class);
-        String passwd = alphaNumericString(6);
+        String passwd = alphaNumericString();
         tmpWorker.setPassword(passwd);
-        tmpWorker.setHired(registerEmployeeForm.convertHireStringToLocalDate());
         Worker worker = createWorker(tmpWorker);
         if (registerEmployeeForm.getIsHR())
             createRoleToWorker(worker.getId().intValue(), Arrays.asList(2, 3));
@@ -88,12 +86,12 @@ public class WorkersService {
         return worker;
     }
 
-    private String alphaNumericString(int len) {
+    private String alphaNumericString() {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rnd = new Random();
 
-        StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++) {
+        StringBuilder sb = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) {
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         }
         return sb.toString();

@@ -1,4 +1,4 @@
-package com.vacation.manager.model.api;
+package com.vacation.manager.model.api.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +24,4 @@ abstract class RegisterTemplate {
 
     public RegisterTemplate() { }
 
-    public LocalDate convertHireStringToLocalDate(){
-        return LocalDate.parse(hired, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
 }
