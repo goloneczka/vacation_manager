@@ -31,10 +31,14 @@ CREATE TABLE IF NOT EXISTS company.role_worker
     role_id                  INTEGER references company.role(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS company.paid_leave
 (
     id                    SERIAL PRIMARY KEY,
     start_date            date not null,
     days                  REAL not null,
-    employee_id           INTEGER not null REFERENCES company.worker(id) ON UPDATE CASCADE ON DELETE CASCADE
+    employee_id           INTEGER not null REFERENCES company.worker(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    end_date              date not null,
+    describe              VARCHAR(1024),
+    status                VARCHAR(128) default 'NEW' CHECK (status = 'NEW' OR status = 'ACCEPTED' OR status = 'REJECTED')
 );

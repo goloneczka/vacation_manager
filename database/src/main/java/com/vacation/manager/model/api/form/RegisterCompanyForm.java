@@ -1,4 +1,4 @@
-package com.vacation.manager.model.api;
+package com.vacation.manager.model.api.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +11,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class RegisterCompanyForm extends RegisterTemplate{
 
-//    @Size(min = 2, message = "Wymagana nazwa firmy, conajmniej dwa znaki")
+    @Size(min = 2, message = "Wymagana nazwa firmy, conajmniej dwa znaki")
     private String enterpriseName;
-//    @Size(min = 6, message = "Wymagane hasło użytkownika, conajmniej sześć znaków")
+    @Size(min = 6, message = "Wymagane hasło użytkownika, conajmniej sześć znaków")
     private String password;
 
     public RegisterCompanyForm() { }

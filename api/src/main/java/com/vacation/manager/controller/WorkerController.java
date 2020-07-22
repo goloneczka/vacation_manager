@@ -1,8 +1,7 @@
 package com.vacation.manager.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.vacation.manager.model.Worker;
-import com.vacation.manager.model.api.RegisterEmployeeForm;
+import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.service.WorkersService;
 import org.modelmapper.ModelMapper;
@@ -37,8 +36,7 @@ public class WorkerController {
     public ResponseEntity<List<WorkerApi>> getEmployeesInCompany(@PathVariable Long enterpriseId) {
         return ResponseEntity.ok()
                 .body(modelMapper.map(workersService.getEmployeesInCompany(enterpriseId),
-                        new TypeReference<List<WorkerApi>>() {
-                        }.getType()));
+                        new TypeReference<List<WorkerApi>>() {}.getType()));
     }
 
     @PostMapping(value = "/CEO/add")

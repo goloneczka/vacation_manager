@@ -4,7 +4,7 @@ import com.vacation.manager.exception.AppException;
 import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.model.Worker;
 import com.vacation.manager.model.api.EnterpriseApi;
-import com.vacation.manager.model.api.RegisterCompanyForm;
+import com.vacation.manager.model.api.form.RegisterCompanyForm;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.service.EnterpriseService;
 import com.vacation.manager.service.WorkersService;

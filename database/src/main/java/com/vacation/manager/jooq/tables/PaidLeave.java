@@ -12,18 +12,20 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PaidLeave extends TableImpl<PaidLeaveRecord> {
 
-    private static final long serialVersionUID = 2106213036;
+    private static final long serialVersionUID = 1596367124;
 
     /**
      * The reference instance of <code>company.paid_leave</code>
@@ -67,6 +69,21 @@ public class PaidLeave extends TableImpl<PaidLeaveRecord> {
      * The column <code>company.paid_leave.employee_id</code>.
      */
     public final TableField<PaidLeaveRecord, Integer> EMPLOYEE_ID = createField(DSL.name("employee_id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>company.paid_leave.end_date</code>.
+     */
+    public final TableField<PaidLeaveRecord, LocalDate> END_DATE = createField(DSL.name("end_date"), org.jooq.impl.SQLDataType.LOCALDATE.nullable(false), this, "");
+
+    /**
+     * The column <code>company.paid_leave.describe</code>.
+     */
+    public final TableField<PaidLeaveRecord, String> DESCRIBE = createField(DSL.name("describe"), org.jooq.impl.SQLDataType.VARCHAR(1024), this, "");
+
+    /**
+     * The column <code>company.paid_leave.status</code>.
+     */
+    public final TableField<PaidLeaveRecord, String> STATUS = createField(DSL.name("status"), org.jooq.impl.SQLDataType.VARCHAR(127).defaultValue(org.jooq.impl.DSL.field("'NEW'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     /**
      * Create a <code>company.paid_leave</code> table reference
@@ -131,6 +148,13 @@ public class PaidLeave extends TableImpl<PaidLeaveRecord> {
     }
 
     @Override
+    public List<Check<PaidLeaveRecord>> getChecks() {
+        return Arrays.<Check<PaidLeaveRecord>>asList(
+              Internal.createCheck(this, DSL.name("check_status"), "((((status)::text = 'NEW'::text) OR ((status)::text = 'ACCEPTED'::text) OR ((status)::text = 'REJECTED'::text)))", true)
+        );
+    }
+
+    @Override
     public PaidLeave as(String alias) {
         return new PaidLeave(DSL.name(alias), this);
     }
@@ -157,11 +181,11 @@ public class PaidLeave extends TableImpl<PaidLeaveRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, LocalDate, Float, Integer> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row7<Integer, LocalDate, Float, Integer, LocalDate, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

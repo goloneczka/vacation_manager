@@ -45,16 +45,20 @@ public class WorkerRepository {
 
 
     public Optional<Worker> createWorker(Worker worker) {
-        var result = dsl.insertInto(WORKER)
-                .set(WORKER.NAME, worker.getName())
-                .set(WORKER.OCCUPATION, worker.getOccupation())
-                .set(WORKER.EMAIL, worker.getEmail())
-                .set(WORKER.PASSWORD, worker.getPassword())
-                .set(WORKER.ENTERPRISE_ID, worker.getEnterpriseId().intValue())
-                .set(WORKER.HIRED, worker.getHired())
-                .returning()
-                .fetchOne();
-        return Optional.ofNullable(result.into(Worker.class));
+        try {
+            var result = dsl.insertInto(WORKER)
+                    .set(WORKER.NAME, worker.getName())
+                    .set(WORKER.OCCUPATION, worker.getOccupation())
+                    .set(WORKER.EMAIL, worker.getEmail())
+                    .set(WORKER.PASSWORD, worker.getPassword())
+                    .set(WORKER.ENTERPRISE_ID, worker.getEnterpriseId().intValue())
+                    .set(WORKER.HIRED, worker.getHired())
+                    .returning()
+                    .fetchOne();
+            return Optional.ofNullable(result.into(Worker.class));
+        } catch (RuntimeException ex) {
+            return Optional.empty();
+        }
     }
 
     public Optional<RoleWorker> createRoleToWorker(Integer workerId, Integer roleId) {
