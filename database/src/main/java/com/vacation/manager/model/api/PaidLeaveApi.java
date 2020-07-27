@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class PaidLeaveApi {
 
+    private Long id;
     private String startDate;
     private String endDate;
     private String describe;
