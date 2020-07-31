@@ -9,6 +9,7 @@ import com.vacation.manager.jooq.tables.PaidLeave;
 import com.vacation.manager.jooq.tables.Role;
 import com.vacation.manager.jooq.tables.RoleWorker;
 import com.vacation.manager.jooq.tables.Worker;
+import com.vacation.manager.jooq.tables.WorkerExtraDays;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +26,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Company extends SchemaImpl {
 
-    private static final long serialVersionUID = -1027934639;
+    private static final long serialVersionUID = 1959428769;
 
     /**
      * The reference instance of <code>company</code>
@@ -58,6 +59,11 @@ public class Company extends SchemaImpl {
     public final Worker WORKER = Worker.WORKER;
 
     /**
+     * The table <code>company.worker_extra_days</code>.
+     */
+    public final WorkerExtraDays WORKER_EXTRA_DAYS = WorkerExtraDays.WORKER_EXTRA_DAYS;
+
+    /**
      * No further instances allowed
      */
     private Company() {
@@ -76,6 +82,7 @@ public class Company extends SchemaImpl {
             Sequences.ENTERPRISE_ID_SEQ,
             Sequences.PAID_LEAVE_ID_SEQ,
             Sequences.ROLE_ID_SEQ,
+            Sequences.WORKER_EXTRA_DAYS_ID_SEQ,
             Sequences.WORKER_ID_SEQ);
     }
 
@@ -86,6 +93,7 @@ public class Company extends SchemaImpl {
             PaidLeave.PAID_LEAVE,
             Role.ROLE,
             RoleWorker.ROLE_WORKER,
-            Worker.WORKER);
+            Worker.WORKER,
+            WorkerExtraDays.WORKER_EXTRA_DAYS);
     }
 }

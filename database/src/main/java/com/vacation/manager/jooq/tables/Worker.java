@@ -17,7 +17,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Worker extends TableImpl<WorkerRecord> {
 
-    private static final long serialVersionUID = -1965537238;
+    private static final long serialVersionUID = 1657354949;
 
     /**
      * The reference instance of <code>company.worker</code>
@@ -87,6 +87,11 @@ public class Worker extends TableImpl<WorkerRecord> {
      * The column <code>company.worker.hired</code>.
      */
     public final TableField<WorkerRecord, LocalDate> HIRED = createField(DSL.name("hired"), org.jooq.impl.SQLDataType.LOCALDATE.defaultValue(org.jooq.impl.DSL.field("CURRENT_DATE", org.jooq.impl.SQLDataType.LOCALDATE)), this, "");
+
+    /**
+     * The column <code>company.worker.employee_vars_id</code>.
+     */
+    public final TableField<WorkerRecord, Integer> EMPLOYEE_VARS_ID = createField(DSL.name("employee_vars_id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>company.worker</code> table reference
@@ -143,11 +148,15 @@ public class Worker extends TableImpl<WorkerRecord> {
 
     @Override
     public List<ForeignKey<WorkerRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<WorkerRecord, ?>>asList(Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY);
+        return Arrays.<ForeignKey<WorkerRecord, ?>>asList(Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY, Keys.WORKER__WORKER_EMPLOYEE_VARS_ID_FKEY);
     }
 
     public Enterprise enterprise() {
         return new Enterprise(this, Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY);
+    }
+
+    public WorkerExtraDays workerExtraDays() {
+        return new WorkerExtraDays(this, Keys.WORKER__WORKER_EMPLOYEE_VARS_ID_FKEY);
     }
 
     @Override
@@ -177,11 +186,11 @@ public class Worker extends TableImpl<WorkerRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Integer, String, Integer, String, String, String, Boolean, LocalDate> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<Integer, String, Integer, String, String, String, Boolean, LocalDate, Integer> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }

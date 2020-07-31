@@ -9,6 +9,7 @@ import com.vacation.manager.jooq.tables.PaidLeave;
 import com.vacation.manager.jooq.tables.Role;
 import com.vacation.manager.jooq.tables.RoleWorker;
 import com.vacation.manager.jooq.tables.Worker;
+import com.vacation.manager.jooq.tables.WorkerExtraDays;
 
 
 /**
@@ -41,4 +42,9 @@ public class Tables {
      * The table <code>company.worker</code>.
      */
     public static final Worker WORKER = Worker.WORKER;
+
+    /**
+     * The table <code>company.worker_extra_days</code>.
+     */
+    public static final WorkerExtraDays WORKER_EXTRA_DAYS = WorkerExtraDays.WORKER_EXTRA_DAYS;
 }

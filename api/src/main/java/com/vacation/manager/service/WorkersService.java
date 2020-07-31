@@ -5,6 +5,7 @@ import com.vacation.manager.messages.RolesMessages;
 import com.vacation.manager.messages.WorkersMessages;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.WorkerExtraDays;
 import com.vacation.manager.model.api.form.RegisterCompanyForm;
 import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.WorkerRepository;
@@ -12,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +41,8 @@ public class WorkersService {
 
     public Worker createWorker(Worker worker) {
         worker.setPassword(passwordEncoder.encode(worker.getPassword()));
+        worker.setEmployeeVarsId(workerRepository.createWorkerVars(Period.between(worker.getHired(), LocalDate.now()).getYears())
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_VARS).build()).getId());
         return workerRepository.createWorker(worker)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_DUP_KEYS).build());
     }
@@ -87,7 +92,7 @@ public class WorkersService {
     }
 
     private String alphaNumericString() {
-        String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String AB = "1023456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rnd = new Random();
 
         StringBuilder sb = new StringBuilder(6);
@@ -95,5 +100,11 @@ public class WorkersService {
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         }
         return sb.toString();
+    }
+
+    public WorkerExtraDays getWorkerDateVars(Long varsId) {
+        return workerRepository.getWorkerExtraDaysById(varsId)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND_VARS).build());
+
     }
 }

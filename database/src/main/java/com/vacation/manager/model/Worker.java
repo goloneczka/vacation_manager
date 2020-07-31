@@ -19,6 +19,7 @@ public class Worker {
     private String name;
     private String occupation;
     private Long enterpriseId;
+    private Long employeeVarsId;
     private Boolean confirmed;
     private LocalDate hired;
 

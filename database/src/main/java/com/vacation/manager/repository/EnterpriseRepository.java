@@ -44,4 +44,10 @@ public class EnterpriseRepository {
                 .where(ENTERPRISE.ID.eq((int) (long) enterpriseId))
                 .fetchOptionalInto(Enterprise.class);
     }
+
+    public Optional<Enterprise> getEnterpriseByName(String name) {
+        return dsl.selectFrom(ENTERPRISE)
+                .where(ENTERPRISE.ENTERPRISE_NAME.eq(name))
+                .fetchOptionalInto(Enterprise.class);
+    }
 }
