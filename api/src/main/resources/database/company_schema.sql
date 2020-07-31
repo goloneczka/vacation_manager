@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS company.enterprise
     id                    SERIAL PRIMARY KEY,
     enterprise_name       VARCHAR(127) not null UNIQUE,
     free_days             real default 20,
-    confirmed             boolean default false,
-    hired                 date default CURRENT_DATE
+    confirmed             boolean default false
 );
 
 CREATE TABLE IF NOT EXISTS company.worker
@@ -13,12 +12,23 @@ CREATE TABLE IF NOT EXISTS company.worker
     id                    SERIAL PRIMARY KEY,
     email                 VARCHAR(127) not null,
     enterprise_id         INTEGER references company.enterprise(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    employee_vars_id      INTEGER not null REFERENCES company.worker_extra_days(id) ON UPDATE CASCADE ON DELETE CASCADE,
     password              VARCHAR(127) not null,
     name                  VARCHAR(127) not null,
     occupation            VARCHAR(127) not null,
     confirmed             boolean default false,
+    hired                 date default CURRENT_DATE,
     unique (email, enterprise_id)
 );
+
+CREATE TABLE IF NOT EXISTS company.worker_extra_days
+(
+    id                    SERIAL PRIMARY KEY,
+    seniority             INTEGER not null,
+    extra_days            INTEGER,
+    annual_extra_days     INTEGER
+);
+
 CREATE TABLE IF NOT EXISTS company.role
 (
     id                    SERIAL PRIMARY KEY,

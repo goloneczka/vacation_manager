@@ -3,6 +3,7 @@ package com.vacation.manager.repository;
 import com.vacation.manager.model.Role;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.WorkerExtraDays;
 import org.jooq.DSLContext;
 
 import java.util.List;
@@ -12,6 +13,8 @@ import static com.vacation.manager.jooq.tables.Enterprise.ENTERPRISE;
 import static com.vacation.manager.jooq.tables.Role.ROLE;
 import static com.vacation.manager.jooq.tables.RoleWorker.ROLE_WORKER;
 import static com.vacation.manager.jooq.tables.Worker.WORKER;
+import static com.vacation.manager.jooq.tables.WorkerExtraDays.WORKER_EXTRA_DAYS;
+
 
 public class WorkerRepository {
 
@@ -52,6 +55,7 @@ public class WorkerRepository {
                     .set(WORKER.EMAIL, worker.getEmail())
                     .set(WORKER.PASSWORD, worker.getPassword())
                     .set(WORKER.ENTERPRISE_ID, worker.getEnterpriseId().intValue())
+                    .set(WORKER.EMPLOYEE_VARS_ID, worker.getEmployeeVarsId().intValue())
                     .set(WORKER.HIRED, worker.getHired())
                     .returning()
                     .fetchOne();
@@ -86,5 +90,25 @@ public class WorkerRepository {
                 .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))
                 .and(WORKER.CONFIRMED.eq(true))
                 .fetchInto(Worker.class);
+    }
+
+    public Optional<WorkerExtraDays> createWorkerVars(int years) {
+        try {
+            var result = dsl.insertInto(WORKER_EXTRA_DAYS)
+                    .set(WORKER_EXTRA_DAYS.SENIORITY, years)
+                    .returning()
+                    .fetchOne();
+            return Optional.ofNullable(result.into(WorkerExtraDays.class));
+        } catch (RuntimeException ex) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<WorkerExtraDays> getWorkerExtraDaysById(Long varsId) {
+        return dsl.select()
+                .from(WORKER_EXTRA_DAYS)
+                .where(WORKER_EXTRA_DAYS.ID.eq((int) (long) varsId))
+                .fetchOptionalInto(WorkerExtraDays.class);
+
     }
 }

@@ -36,4 +36,10 @@ public class EnterpriseService {
         return enterpriseRepository.getEnterprise(id)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.NOT_FOUND).build());
     }
+
+    public Enterprise getEnterpriseByName(String name) {
+        return enterpriseRepository.getEnterpriseByName(name)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.NOT_FOUND).build());
+
+    }
 }

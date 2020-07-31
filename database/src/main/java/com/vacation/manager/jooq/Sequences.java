@@ -30,6 +30,11 @@ public class Sequences {
     public static final Sequence<Integer> ROLE_ID_SEQ = Internal.createSequence("role_id_seq", Company.COMPANY, org.jooq.impl.SQLDataType.INTEGER.nullable(false), null, null, null, null, false, null);
 
     /**
+     * The sequence <code>company.worker_extra_days_id_seq</code>
+     */
+    public static final Sequence<Integer> WORKER_EXTRA_DAYS_ID_SEQ = Internal.createSequence("worker_extra_days_id_seq", Company.COMPANY, org.jooq.impl.SQLDataType.INTEGER.nullable(false), null, null, null, null, false, null);
+
+    /**
      * The sequence <code>company.worker_id_seq</code>
      */
     public static final Sequence<Integer> WORKER_ID_SEQ = Internal.createSequence("worker_id_seq", Company.COMPANY, org.jooq.impl.SQLDataType.INTEGER.nullable(false), null, null, null, null, false, null);

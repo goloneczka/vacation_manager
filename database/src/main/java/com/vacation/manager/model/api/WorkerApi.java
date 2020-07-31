@@ -16,6 +16,7 @@ public class WorkerApi {
     private String name;
     private String occupation;
     private Long enterpriseId;
+    private Long employeeVarsId;
     private List<Role> roles;
     private String hired;
 

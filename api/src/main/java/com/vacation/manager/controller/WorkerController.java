@@ -1,6 +1,8 @@
 package com.vacation.manager.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.vacation.manager.model.WorkerExtraDays;
+import com.vacation.manager.model.api.WorkerExtraDaysApi;
 import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.service.WorkersService;
@@ -49,5 +51,11 @@ public class WorkerController {
     public ResponseEntity<WorkerApi> confirmEnterpriseAndCeo(@PathVariable String mail, @PathVariable Long enterpriseId) {
         return ResponseEntity.ok()
                 .body(modelMapper.map(workersService.confirmWorker(mail, enterpriseId), WorkerApi.class));
+    }
+
+    @GetMapping(value = "/employee/{varsId}")
+    public ResponseEntity<WorkerExtraDaysApi> getWorkerVars(@PathVariable Long varsId) {
+        return ResponseEntity.ok()
+                .body(modelMapper.map(workersService.getWorkerDateVars(varsId), WorkerExtraDaysApi.class));
     }
 }

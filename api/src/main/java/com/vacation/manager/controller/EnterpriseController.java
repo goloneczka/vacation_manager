@@ -54,6 +54,13 @@ public class EnterpriseController {
 
     }
 
+    @GetMapping(value = "/{name}")
+    public ResponseEntity<EnterpriseApi> getEnterpriseByName(@PathVariable String name) {
+        return ResponseEntity.ok()
+                .body(modelMapper.map(enterpriseService.getEnterpriseByName(name), EnterpriseApi.class));
+
+    }
+
 
 
 }
