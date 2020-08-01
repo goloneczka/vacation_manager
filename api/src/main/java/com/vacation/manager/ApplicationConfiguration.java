@@ -10,8 +10,6 @@ import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.EnterpriseRepository;
 import com.vacation.manager.repository.LeaveRepository;
 import com.vacation.manager.repository.WorkerRepository;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.HtmlEmail;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
@@ -20,9 +18,12 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -84,13 +85,18 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public HtmlEmail htmlEmail() {
-        HtmlEmail mail = new HtmlEmail();
-        mail.setHostName("smtp.gmail.com");
-        mail.setSmtpPort(465);
-        mail.setSSLOnConnect(true);
-        mail.setAuthenticator(new DefaultAuthenticator("vacationmanagerapp@gmail.com", "klopek1432"));
-        return mail;
+    public JavaMailSender javaMailSender ()  {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("vacationmanagerapp@gmail.com");
+        mailSender.setPassword("klopek1432");
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.startssl.enable", "true");
+        return mailSender;
     }
 
 

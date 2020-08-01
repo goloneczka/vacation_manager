@@ -32,7 +32,6 @@ public class EnterpriseController {
     }
 
     @PostMapping("/enterprise")
-    @Transactional(rollbackFor = AppException.class)
     public ResponseEntity<WorkerApi> createEnterprise(@Valid @RequestBody RegisterCompanyForm registerCompanyForm) {
         Enterprise enterprise = enterpriseService.createEnterprise(modelMapper.map(registerCompanyForm, Enterprise.class));
         Worker worker = workersService.addCeo(registerCompanyForm, enterprise.getId());
