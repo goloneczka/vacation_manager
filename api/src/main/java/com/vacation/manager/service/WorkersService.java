@@ -1,5 +1,6 @@
 package com.vacation.manager.service;
 
+import com.vacation.manager.exception.AppException;
 import com.vacation.manager.exception.AppExceptionBuilder;
 import com.vacation.manager.messages.RolesMessages;
 import com.vacation.manager.messages.WorkersMessages;
@@ -12,6 +13,7 @@ import com.vacation.manager.repository.WorkerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -39,7 +41,7 @@ public class WorkersService {
     }
 
 
-    public Worker createWorker(Worker worker) {
+    private Worker createWorker(Worker worker) {
         worker.setPassword(passwordEncoder.encode(worker.getPassword()));
         worker.setEmployeeVarsId(workerRepository.createWorkerVars(Period.between(worker.getHired(), LocalDate.now()).getYears())
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_VARS).build()).getId());
@@ -47,6 +49,7 @@ public class WorkersService {
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_DUP_KEYS).build());
     }
 
+    @Transactional(rollbackFor = AppException.class)
     public Worker addCeo(RegisterCompanyForm registerCompanyForm, Long enterpriseId){
         Worker tmpWorker = modelMapper.map(registerCompanyForm, Worker.class);
         tmpWorker.setEnterpriseId(enterpriseId);
@@ -78,6 +81,7 @@ public class WorkersService {
         return workerRepository.getEmployeesByEnterpriseId(enterpriseId);
     }
 
+    @Transactional(rollbackFor = AppException.class)
     public Worker addEmployee(RegisterEmployeeForm registerEmployeeForm) {
         Worker tmpWorker = modelMapper.map(registerEmployeeForm, Worker.class);
         String passwd = alphaNumericString();
