@@ -73,6 +73,10 @@ public class ApplicationConfiguration {
             mapping.map(Worker::getHired, WorkerApi::setHiredFromLocalDate);
         });
 
+        mapper.typeMap(WorkerApi.class, Worker.class).addMappings(mapping -> {
+            mapping.map(WorkerApi::getHired, Worker::setHiredFromString);
+        });
+
         mapper.typeMap(RegisterEmployeeForm.class, Worker.class).addMappings(mapping -> {
             mapping.map(RegisterEmployeeForm::getHired, Worker::setHiredFromString);
         });

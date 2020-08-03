@@ -7,6 +7,8 @@ import com.vacation.manager.messages.WorkersMessages;
 import com.vacation.manager.model.RoleWorker;
 import com.vacation.manager.model.Worker;
 import com.vacation.manager.model.WorkerExtraDays;
+import com.vacation.manager.model.api.WorkerApi;
+import com.vacation.manager.model.api.WorkerExtraDaysApi;
 import com.vacation.manager.model.api.form.RegisterCompanyForm;
 import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.WorkerRepository;
@@ -109,6 +111,20 @@ public class WorkersService {
     public WorkerExtraDays getWorkerDateVars(Long varsId) {
         return workerRepository.getWorkerExtraDaysById(varsId)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND_VARS).build());
-
     }
+
+    public WorkerExtraDays setWorkerDateVars(Long varsId, WorkerExtraDaysApi workerExtraDaysApi) {
+        WorkerExtraDays tmpWorkerExtraDays = modelMapper.map(workerExtraDaysApi, WorkerExtraDays.class);
+        return workerRepository.setWorkerExtraDaysById(varsId, tmpWorkerExtraDays)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());
+    }
+
+    public Worker setWorker(String mail, String enterprise, WorkerApi workerApi) {
+        Worker tmpWorker = modelMapper.map(workerApi, Worker.class);
+        Long id = workerRepository.findConfirmedByEmailAndEnterprise(mail, enterprise)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build()).getId();
+        return workerRepository.setWorker(id, tmpWorker)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());
+    }
+
 }
