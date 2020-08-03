@@ -111,4 +111,28 @@ public class WorkerRepository {
                 .fetchOptionalInto(WorkerExtraDays.class);
 
     }
+
+    public Optional<Worker> setWorker(Long id, Worker worker) {
+        return dsl
+                .update(WORKER)
+                .set(WORKER.OCCUPATION, worker.getOccupation())
+                .set(WORKER.EMAIL, worker.getEmail())
+                .set(WORKER.HIRED, worker.getHired())
+                .where(WORKER.ID.eq((int) (long) id))
+                .returning()
+                .fetchOptional()
+                .map(record -> record.into(Worker.class));
+    }
+
+    public Optional<WorkerExtraDays> setWorkerExtraDaysById(Long varsId, WorkerExtraDays tmpWorkerExtraDays) {
+        return dsl
+                .update(WORKER_EXTRA_DAYS)
+                .set(WORKER_EXTRA_DAYS.ANNUAL_EXTRA_DAYS, tmpWorkerExtraDays.getAnnualExtraDays())
+                .set(WORKER_EXTRA_DAYS.EXTRA_DAYS, tmpWorkerExtraDays.getExtraDays())
+                .set(WORKER_EXTRA_DAYS.SENIORITY, tmpWorkerExtraDays.getSeniority())
+                .where(WORKER_EXTRA_DAYS.ID.eq((int) (long) varsId))
+                .returning()
+                .fetchOptional()
+                .map(record -> record.into(WorkerExtraDays.class));
+    }
 }

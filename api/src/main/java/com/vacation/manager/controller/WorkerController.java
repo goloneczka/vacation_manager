@@ -34,6 +34,15 @@ public class WorkerController {
                 .body(modelMapper.map(workersService.getWorkerByEmailAndEnterprise(mail, enterprise), WorkerApi.class));
     }
 
+    @PutMapping(value = "/{mail}/{enterprise}")
+    public ResponseEntity<WorkerApi> setWorker(
+            @PathVariable String mail, @PathVariable String enterprise,
+            @Valid @RequestBody WorkerApi workerApi) {
+
+        return ResponseEntity.ok()
+                .body(modelMapper.map(workersService.setWorker(mail, enterprise, workerApi), WorkerApi.class));
+    }
+
     @GetMapping(value = "/HR/{enterpriseId}")
     public ResponseEntity<List<WorkerApi>> getEmployeesInCompany(@PathVariable Long enterpriseId) {
         return ResponseEntity.ok()
@@ -57,5 +66,14 @@ public class WorkerController {
     public ResponseEntity<WorkerExtraDaysApi> getWorkerVars(@PathVariable Long varsId) {
         return ResponseEntity.ok()
                 .body(modelMapper.map(workersService.getWorkerDateVars(varsId), WorkerExtraDaysApi.class));
+    }
+
+    @PutMapping(value = "/employee/{varsId}")
+    public ResponseEntity<WorkerExtraDaysApi> setWorkerVars(
+            @PathVariable Long varsId,
+            @Valid @RequestBody WorkerExtraDaysApi workerExtraDaysApi) {
+
+        return ResponseEntity.ok()
+                .body(modelMapper.map(workersService.setWorkerDateVars(varsId, workerExtraDaysApi), WorkerExtraDaysApi.class));
     }
 }
