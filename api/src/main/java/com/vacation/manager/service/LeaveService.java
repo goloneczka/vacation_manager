@@ -10,8 +10,7 @@ import com.vacation.manager.repository.LeaveRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Service
 public class LeaveService {
@@ -25,6 +24,11 @@ public class LeaveService {
     }
 
     public PaidLeave createWorkerLeaves(PaidLeave paidLeave, String mail, String enterprise) {
+        getWorkerLeaves(mail, enterprise).forEach(tmpPaidLeave -> {
+            if (paidLeave.getStartDate().isBefore(tmpPaidLeave.getStartDate()) &&
+                    paidLeave.getEndDate().isAfter(tmpPaidLeave.getEndDate()))
+                throw new AppExceptionBuilder().addError(PaidLeavesMessages.FAILURE_EXCEPTION_DURATION).build();
+        });
         long id = workersService.getWorkerByEmailAndEnterprise(mail, enterprise).getId();
         return leaveRepository.createPaidLeave(paidLeave, id)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE).build());
