@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 @AllArgsConstructor
-public class PaidLeave {
+public class PaidLeave implements Cloneable{
 
     private Long id;
     private LocalDate startDate;
@@ -27,5 +27,10 @@ public class PaidLeave {
 
     public void setEndDateFromString(String startDate1){
         endDate = LocalDate.parse(startDate1, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

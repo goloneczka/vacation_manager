@@ -8,6 +8,7 @@ import com.vacation.manager.jooq.Company;
 import com.vacation.manager.jooq.Keys;
 import com.vacation.manager.jooq.tables.records.EnterpriseRecord;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Enterprise extends TableImpl<EnterpriseRecord> {
 
-    private static final long serialVersionUID = -1954209990;
+    private static final long serialVersionUID = 1799870408;
 
     /**
      * The reference instance of <code>company.enterprise</code>
@@ -66,6 +67,11 @@ public class Enterprise extends TableImpl<EnterpriseRecord> {
      * The column <code>company.enterprise.confirmed</code>.
      */
     public final TableField<EnterpriseRecord, Boolean> CONFIRMED = createField(DSL.name("confirmed"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>company.enterprise.restart_time</code>.
+     */
+    public final TableField<EnterpriseRecord, LocalDate> RESTART_TIME = createField(DSL.name("restart_time"), org.jooq.impl.SQLDataType.LOCALDATE, this, "");
 
     /**
      * Create a <code>company.enterprise</code> table reference
@@ -147,11 +153,11 @@ public class Enterprise extends TableImpl<EnterpriseRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, Float, Boolean> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<Integer, String, Float, Boolean, LocalDate> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

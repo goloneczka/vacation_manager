@@ -1,8 +1,10 @@
 package com.vacation.manager;
 
 
+import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.model.PaidLeave;
 import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.api.EnterpriseApi;
 import com.vacation.manager.model.api.PaidLeaveApi;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.model.api.form.RegisterCompanyForm;
@@ -75,6 +77,14 @@ public class ApplicationConfiguration {
 
         mapper.typeMap(WorkerApi.class, Worker.class).addMappings(mapping -> {
             mapping.map(WorkerApi::getHired, Worker::setHiredFromString);
+        });
+
+        mapper.typeMap(Enterprise.class, EnterpriseApi.class).addMappings(mapping -> {
+            mapping.map(Enterprise::getRestartTime, EnterpriseApi::setRestartFromLocalDate);
+        });
+
+        mapper.typeMap(EnterpriseApi.class, Enterprise.class).addMappings(mapping -> {
+            mapping.map(EnterpriseApi::getRestartTime, Enterprise::setRestartFromString);
         });
 
         mapper.typeMap(RegisterEmployeeForm.class, Worker.class).addMappings(mapping -> {

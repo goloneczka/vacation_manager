@@ -1,14 +1,19 @@
 package com.vacation.manager.service;
 
+import com.vacation.manager.exception.AppException;
 import com.vacation.manager.exception.AppExceptionBuilder;
-import com.vacation.manager.messages.EnterprisesMessages;
 import com.vacation.manager.messages.PaidLeavesMessages;
 import com.vacation.manager.model.PaidLeave;
+import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.WorkerExtraDays;
 import com.vacation.manager.model.api.WorkerLeaveApi;
 import com.vacation.manager.model.api.WorkerLeaveListApi;
 import com.vacation.manager.repository.LeaveRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -17,21 +22,63 @@ public class LeaveService {
 
     private final LeaveRepository leaveRepository;
     private final WorkersService workersService;
+    private final EnterpriseService enterpriseService;
 
-    public LeaveService(LeaveRepository leaveRepository, WorkersService workersService) {
+
+    public LeaveService(LeaveRepository leaveRepository, WorkersService workersService, EnterpriseService enterpriseService) {
         this.leaveRepository = leaveRepository;
         this.workersService = workersService;
+        this.enterpriseService = enterpriseService;
     }
 
+    @Transactional(rollbackFor = AppException.class)
     public PaidLeave createWorkerLeaves(PaidLeave paidLeave, String mail, String enterprise) {
-        getWorkerLeaves(mail, enterprise).forEach(tmpPaidLeave -> {
+        Worker tmpWorker = workersService.getWorkerByEmailAndEnterprise(mail, enterprise);
+        LocalDate newYear = LocalDate.of(LocalDate.now().plusYears(1).getYear(), 1, 1);
+
+        int usedDays = 0;
+        int usedDaysPresentYear = 0;
+        for (PaidLeave tmpPaidLeave : getWorkerLeaves(mail, enterprise)) {
             if (paidLeave.getStartDate().isBefore(tmpPaidLeave.getStartDate()) &&
                     paidLeave.getEndDate().isAfter(tmpPaidLeave.getEndDate()))
-                throw new AppExceptionBuilder().addError(PaidLeavesMessages.FAILURE_EXCEPTION_DURATION).build();
-        });
-        long id = workersService.getWorkerByEmailAndEnterprise(mail, enterprise).getId();
-        return leaveRepository.createPaidLeave(paidLeave, id)
+                throw new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE_DURATION).build();
+            if (tmpPaidLeave.getEndDate().isBefore(newYear))
+                usedDaysPresentYear += tmpPaidLeave.getDays();
+            usedDays += tmpPaidLeave.getDays();
+        }
+
+        if (paidLeave.getStartDate().getYear() != paidLeave.getEndDate().getYear()) {
+            PaidLeave newYearPaidLeave;
+            try {
+                newYearPaidLeave = (PaidLeave) paidLeave.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new AppExceptionBuilder().addError(e.getMessage()).build();
+            }
+
+            newYearPaidLeave.setStartDate(newYear);
+            newYearPaidLeave.setDays(Duration.between(paidLeave.getStartDate(), paidLeave.getEndDate()).toDays());
+            if (usedDays - usedDaysPresentYear + newYearPaidLeave.getDays() > getWorkerFutureFreeDays(tmpWorker.getEmployeeVarsId(), enterprise))
+                throw new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE_AMOUNT).build();
+            leaveRepository.createPaidLeave(newYearPaidLeave, tmpWorker.getId())
+                    .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE).build());
+
+            paidLeave.setEndDate(LocalDate.of(LocalDate.now().getYear(), 12, 31));
+            paidLeave.setDays(Duration.between(paidLeave.getStartDate(), paidLeave.getEndDate()).toDays());
+        }
+        if (usedDaysPresentYear + paidLeave.getDays() > getWorkerFreeDays(tmpWorker.getEmployeeVarsId(), enterprise))
+            throw new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE_AMOUNT).build();
+        return leaveRepository.createPaidLeave(paidLeave, tmpWorker.getId())
                 .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE).build());
+    }
+
+    private int getWorkerFreeDays(Long id, String enterprise) {
+        return getWorkerFutureFreeDays(id, enterprise) + workersService.getWorkerDateVars(id).getAnnualExtraDays();
+    }
+
+    private int getWorkerFutureFreeDays(Long id, String enterprise) {
+        WorkerExtraDays tmpWED = workersService.getWorkerDateVars(id);
+        return enterpriseService.getEnterpriseByName(enterprise).getFreeDays()
+                + tmpWED.getExtraDays() + (tmpWED.getSeniority() > 10 ? 6 : 0);
     }
 
     public List<PaidLeave> getWorkerLeaves(String mail, String enterprise) {
@@ -48,7 +95,7 @@ public class LeaveService {
         new LinkedList<>(leaveRepository.getHistoryLeavesByWorkerEnterpriseId(enterpriseId, page))
                 .descendingIterator()
                 .forEachRemaining(reversed::add);
-        return  reversed;
+        return reversed;
 
     }
 
@@ -61,6 +108,13 @@ public class LeaveService {
     public PaidLeave putLeaveStatus(Long id, String status) {
         return leaveRepository.setStatus(id, status)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.UPDATE_FAILURE).build());
+    }
 
+
+    @Transactional(rollbackFor = AppException.class)
+    public void deleteOutDated(String enterprise, LocalDate now) {
+        if (leaveRepository.deleteOutdatedLeavesInCompany(enterprise, now) == -1)
+            throw new AppExceptionBuilder().addError(PaidLeavesMessages.UPDATE_FAILURE).build();
+        enterpriseService.updateRestart(enterprise, now);
     }
 }

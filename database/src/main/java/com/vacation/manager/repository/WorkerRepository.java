@@ -135,4 +135,13 @@ public class WorkerRepository {
                 .fetchOptional()
                 .map(record -> record.into(WorkerExtraDays.class));
     }
+
+    public void setWorkerExtraDaysByScheduler() {
+        dsl
+                .update(WORKER_EXTRA_DAYS)
+                .set(WORKER_EXTRA_DAYS.ANNUAL_EXTRA_DAYS, 0)
+                .execute();
+    }
+
+
 }

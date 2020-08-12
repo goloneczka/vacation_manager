@@ -113,7 +113,7 @@ public class WorkersService {
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND_VARS).build());
     }
 
-    public WorkerExtraDays setWorkerDateVars(Long varsId, WorkerExtraDaysApi workerExtraDaysApi) {
+    public WorkerExtraDays setWorkerDataVars(Long varsId, WorkerExtraDaysApi workerExtraDaysApi) {
         WorkerExtraDays tmpWorkerExtraDays = modelMapper.map(workerExtraDaysApi, WorkerExtraDays.class);
         return workerRepository.setWorkerExtraDaysById(varsId, tmpWorkerExtraDays)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());
@@ -126,5 +126,6 @@ public class WorkersService {
         return workerRepository.setWorker(id, tmpWorker)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());
     }
+
 
 }

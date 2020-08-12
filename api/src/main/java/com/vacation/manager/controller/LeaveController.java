@@ -6,12 +6,15 @@ import com.vacation.manager.model.api.PaidLeaveApi;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.model.api.WorkerLeaveApi;
 import com.vacation.manager.model.api.WorkerLeaveListApi;
+import com.vacation.manager.response.ResponseStatus;
 import com.vacation.manager.service.LeaveService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,7 +36,8 @@ public class LeaveController {
 
         return ResponseEntity.ok()
                 .body(modelMapper.map(leaveService.getWorkerLeaves(mail, enterprise),
-                        new TypeReference<List<PaidLeaveApi>>() {}.getType()));
+                        new TypeReference<List<PaidLeaveApi>>() {
+                        }.getType()));
     }
 
 
@@ -58,7 +62,8 @@ public class LeaveController {
 
         return ResponseEntity.ok()
                 .body(modelMapper.map(leaveService.getHistoryLeavesInEnterprise(enterpriseId, page),
-                        new TypeReference<List<PaidLeaveApi>>() {}.getType()));
+                        new TypeReference<List<PaidLeaveApi>>() {
+                        }.getType()));
     }
 
     @PostMapping(value = "/add/{mail}/{enterprise}")
@@ -73,5 +78,13 @@ public class LeaveController {
     public ResponseEntity<PaidLeaveApi> setLeaveStatus(@PathVariable Long id, @PathVariable String status) {
         return ResponseEntity.ok()
                 .body(modelMapper.map(leaveService.putLeaveStatus(id, status), PaidLeaveApi.class));
+    }
+
+    @DeleteMapping(value = "/CEO/{enterprise}")
+    public ResponseEntity<?> clearLeaves(@PathVariable String enterprise) {
+        leaveService.deleteOutDated(enterprise, LocalDate.now());
+        return ResponseEntity
+                .status(ResponseStatus.OK)
+                .body(new HashMap.SimpleEntry<>("success", true));
     }
 }
