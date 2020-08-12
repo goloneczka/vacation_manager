@@ -7,6 +7,8 @@ import com.vacation.manager.model.Enterprise;
 import com.vacation.manager.repository.EnterpriseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 
 @Service
 public class EnterpriseService {
@@ -40,6 +42,12 @@ public class EnterpriseService {
     public Enterprise getEnterpriseByName(String name) {
         return enterpriseRepository.getEnterpriseByName(name)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.NOT_FOUND).build());
+
+    }
+
+    public Enterprise updateRestart(String enterprise, LocalDate now) {
+        return enterpriseRepository.setUpdatedTime(enterprise, now)
+                .orElseThrow(() -> new AppExceptionBuilder().addError(EnterprisesMessages.UPDATE_FAILURE).build());
 
     }
 }

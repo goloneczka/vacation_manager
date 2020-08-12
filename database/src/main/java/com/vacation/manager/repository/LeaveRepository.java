@@ -1,14 +1,15 @@
 package com.vacation.manager.repository;
 
 import com.vacation.manager.model.PaidLeave;
-import com.vacation.manager.model.Worker;
 import com.vacation.manager.model.api.WorkerLeaveApi;
 import com.vacation.manager.model.api.WorkerLeaveListApi;
 import org.jooq.DSLContext;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.vacation.manager.jooq.tables.Enterprise.ENTERPRISE;
 import static com.vacation.manager.jooq.tables.PaidLeave.PAID_LEAVE;
 import static com.vacation.manager.jooq.tables.Worker.WORKER;
 
@@ -78,7 +79,7 @@ public class LeaveRepository {
                 .from(PAID_LEAVE)
                 .join(WORKER)
                 .on(WORKER.ID.eq(PAID_LEAVE.EMPLOYEE_ID))
-                .where(PAID_LEAVE.ID.eq((int) (long)leaveId))
+                .where(PAID_LEAVE.ID.eq((int) (long) leaveId))
                 .fetchOptionalInto(WorkerLeaveApi.class);
     }
 
@@ -89,5 +90,29 @@ public class LeaveRepository {
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(PaidLeave.class));
+    }
+
+    public void deleteOutdatedLeavesByScheduler(LocalDate time) {
+        dsl.delete(PAID_LEAVE)
+                .where(PAID_LEAVE.END_DATE.lessThan(time))
+                .or(PAID_LEAVE.STATUS.eq("REJECTED"))
+                .execute();
+    }
+
+    public int deleteOutdatedLeavesInCompany(String enterprise, LocalDate time) {
+        try {
+            return dsl.delete(PAID_LEAVE)
+                    .where(PAID_LEAVE.END_DATE.lessThan(time).or(PAID_LEAVE.STATUS.eq("REJECTED")))
+                    .and(PAID_LEAVE.EMPLOYEE_ID.in(
+                            dsl.select(WORKER.ID)
+                                    .from(WORKER)
+                                    .where(WORKER.ENTERPRISE_ID.eq(
+                                            dsl.select(ENTERPRISE.ID)
+                                                    .from(ENTERPRISE)
+                                                    .where(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))))))
+                    .execute();
+        } catch (RuntimeException ex) {
+            return -1;
+        }
     }
 }

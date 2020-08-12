@@ -74,6 +74,6 @@ public class WorkerController {
             @Valid @RequestBody WorkerExtraDaysApi workerExtraDaysApi) {
 
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.setWorkerDateVars(varsId, workerExtraDaysApi), WorkerExtraDaysApi.class));
+                .body(modelMapper.map(workersService.setWorkerDataVars(varsId, workerExtraDaysApi), WorkerExtraDaysApi.class));
     }
 }

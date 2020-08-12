@@ -5,6 +5,7 @@ import org.jooq.DSLContext;
 
 import static com.vacation.manager.jooq.tables.Enterprise.ENTERPRISE;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class EnterpriseRepository {
@@ -49,5 +50,22 @@ public class EnterpriseRepository {
         return dsl.selectFrom(ENTERPRISE)
                 .where(ENTERPRISE.ENTERPRISE_NAME.eq(name))
                 .fetchOptionalInto(Enterprise.class);
+    }
+
+    public void updateRestartByScheduler(LocalDate now) {
+        dsl
+                .update(ENTERPRISE)
+                .set(ENTERPRISE.RESTART_TIME, now)
+                .execute();
+    }
+
+    public Optional<Enterprise> setUpdatedTime(String name, LocalDate now) {
+        return dsl
+                .update(ENTERPRISE)
+                .set(ENTERPRISE.RESTART_TIME, now)
+                .where(ENTERPRISE.ENTERPRISE_NAME.eq(name))
+                .returning()
+                .fetchOptional()
+                .map(record -> record.into(Enterprise.class));
     }
 }
