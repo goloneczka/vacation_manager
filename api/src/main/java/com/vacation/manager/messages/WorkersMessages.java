@@ -7,4 +7,6 @@ public class WorkersMessages {
     public final static String CREATE_FAILURE_DUP_KEYS = "Pracownik o tym mailu już istnieje w firmie";
     public final static String CREATE_FAILURE_VARS = "Ustawienia pracownika nie mogły zostać utworzone";
     public final static String UPDATE_FAILURE = "Pracownik nie został zaktualizowany";
+    public final static String UPDATE_FAILURE_AMMOUNT_DAYS = "Pracownik wykorzystał już dopisane mu dni urlopowe";
+
 }
