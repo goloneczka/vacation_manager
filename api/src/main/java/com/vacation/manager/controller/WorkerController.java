@@ -68,12 +68,13 @@ public class WorkerController {
                 .body(modelMapper.map(workersService.getWorkerDateVars(varsId), WorkerExtraDaysApi.class));
     }
 
-    @PutMapping(value = "/employee/{varsId}")
+    @PutMapping(value = "/employee/{email}/{enterprise}")
     public ResponseEntity<WorkerExtraDaysApi> setWorkerVars(
-            @PathVariable Long varsId,
-            @Valid @RequestBody WorkerExtraDaysApi workerExtraDaysApi) {
+            @PathVariable String email,
+            @Valid @RequestBody WorkerExtraDaysApi workerExtraDaysApi, @PathVariable String enterprise) {
 
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.setWorkerDataVars(varsId, workerExtraDaysApi), WorkerExtraDaysApi.class));
+                .body(modelMapper.map(
+                        workersService.setWorkerDataVars(email, workerExtraDaysApi, enterprise), WorkerExtraDaysApi.class));
     }
 }

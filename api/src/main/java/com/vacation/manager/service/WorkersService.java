@@ -13,6 +13,7 @@ import com.vacation.manager.model.api.form.RegisterCompanyForm;
 import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.WorkerRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,13 +34,18 @@ public class WorkersService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final EmailService emailService;
+    private final EnterpriseService enterpriseService;
+    private final LeaveService leaveService;
 
     public WorkersService(WorkerRepository workerRepository, PasswordEncoder passwordEncoder,
-                          ModelMapper modelMapper, EmailService emailService) {
+                          ModelMapper modelMapper, EmailService emailService, EnterpriseService enterpriseService,
+                          @Lazy LeaveService leaveService) {
         this.workerRepository = workerRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.emailService = emailService;
+        this.enterpriseService = enterpriseService;
+        this.leaveService = leaveService;
     }
 
 
@@ -113,10 +119,25 @@ public class WorkersService {
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND_VARS).build());
     }
 
-    public WorkerExtraDays setWorkerDataVars(Long varsId, WorkerExtraDaysApi workerExtraDaysApi) {
+    public WorkerExtraDays setWorkerDataVars(String email, WorkerExtraDaysApi workerExtraDaysApi, String enterprise) {
         WorkerExtraDays tmpWorkerExtraDays = modelMapper.map(workerExtraDaysApi, WorkerExtraDays.class);
-        return workerRepository.setWorkerExtraDaysById(varsId, tmpWorkerExtraDays)
+        LocalDate newYear = LocalDate.of(LocalDate.now().plusYears(1).getYear(), 1, 1);
+        int usedDaysPresentYear = leaveService.getWorkerLeaves(email, enterprise).stream()
+                .filter(tmp -> !tmp.getStatus().equals("REJECTED") && tmp.getEndDate().isBefore(newYear))
+                .mapToInt(tmp -> (int) tmp.getDays()).sum();
+        if(usedDaysPresentYear > getWorkerFreeDays(tmpWorkerExtraDays, enterprise))
+            throw new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE_AMMOUNT_DAYS).build();
+        return workerRepository.setWorkerExtraDaysById(getWorkerByEmailAndEnterprise(email, enterprise).getEmployeeVarsId(), tmpWorkerExtraDays)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());
+    }
+
+    public int getWorkerFreeDays(WorkerExtraDays tmpWED, String enterprise) {
+        return getWorkerFutureFreeDays(tmpWED, enterprise) + tmpWED.getAnnualExtraDays();
+    }
+
+    public int getWorkerFutureFreeDays(WorkerExtraDays tmpWED, String enterprise) {
+        return enterpriseService.getEnterpriseByName(enterprise).getFreeDays()
+                + tmpWED.getExtraDays() + (tmpWED.getSeniority() >= 10 ? 6 : 0);
     }
 
     public Worker setWorker(String mail, String enterprise, WorkerApi workerApi) {
