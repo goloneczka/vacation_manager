@@ -15,7 +15,6 @@ public class PaidLeaveApi {
     private String startDate;
     private String endDate;
     private String describe;
-    @Min(value = 1, message = "Ilość dni urlopowych musi być większa od zera")
     private float days;
     private String status;
 
