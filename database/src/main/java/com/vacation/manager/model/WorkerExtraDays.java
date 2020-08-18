@@ -13,6 +13,7 @@ public class WorkerExtraDays {
     private int seniority;
     private int extraDays;
     private int annualExtraDays;
+    private int transitiveDays;
 
     public WorkerExtraDays() { }
 

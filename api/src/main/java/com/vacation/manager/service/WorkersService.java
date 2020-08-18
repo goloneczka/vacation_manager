@@ -132,12 +132,13 @@ public class WorkersService {
     }
 
     public int getWorkerFreeDays(WorkerExtraDays tmpWED, String enterprise) {
-        return getWorkerFutureFreeDays(tmpWED, enterprise) + tmpWED.getAnnualExtraDays();
+        return getWorkerFutureFreeDays(tmpWED, enterprise) + tmpWED.getAnnualExtraDays()
+                + tmpWED.getTransitiveDays();
     }
 
     public int getWorkerFutureFreeDays(WorkerExtraDays tmpWED, String enterprise) {
         return enterpriseService.getEnterpriseByName(enterprise).getFreeDays()
-                + tmpWED.getExtraDays() + (tmpWED.getSeniority() >= 10 ? 6 : 0);
+                + tmpWED.getExtraDays() + (tmpWED.getSeniority() >= 10 ? 6 : 0) ;
     }
 
     public Worker setWorker(String mail, String enterprise, WorkerApi workerApi) {

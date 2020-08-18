@@ -17,6 +17,8 @@ public class WorkerExtraDaysApi {
     private int extraDays;
     @Min(value = 0, message = "Wymagany format w postaci liczby" )
     private int annualExtraDays;
+    private int transitiveDays;
+
 
     public WorkerExtraDaysApi() { }
 

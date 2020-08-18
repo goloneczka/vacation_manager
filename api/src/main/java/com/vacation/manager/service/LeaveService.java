@@ -11,6 +11,7 @@ import com.vacation.manager.repository.LeaveRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
@@ -34,6 +35,7 @@ public class LeaveService {
     public PaidLeave createWorkerLeaves(PaidLeave paidLeave, String mail, String enterprise) {
         Worker tmpWorker = workersService.getWorkerByEmailAndEnterprise(mail, enterprise);
         LocalDate newYear = LocalDate.of(LocalDate.now().plusYears(1).getYear(), 1, 1);
+        paidLeave.setDays(countDaysInPaidLeave(paidLeave.getStartDate(), paidLeave.getEndDate()));
 
         int usedDays = 0;
         int usedDaysPresentYear = 0;
@@ -48,7 +50,14 @@ public class LeaveService {
             }
         }
 
-        if (paidLeave.getStartDate().getYear() != paidLeave.getEndDate().getYear()) {
+        if(paidLeave.getStartDate().getYear() == newYear.getYear()){
+            if (usedDays - usedDaysPresentYear + paidLeave.getDays() >
+                    workersService.getWorkerFutureFreeDays(workersService.getWorkerDateVars(tmpWorker.getEmployeeVarsId()), enterprise))
+                throw new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE_AMOUNT).build();
+            return leaveRepository.createPaidLeave(paidLeave, tmpWorker.getId())
+                    .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE).build());
+        }
+        else if (paidLeave.getStartDate().getYear() != paidLeave.getEndDate().getYear()) {
             PaidLeave newYearPaidLeave;
             try {
                 newYearPaidLeave = (PaidLeave) paidLeave.clone();
@@ -56,7 +65,7 @@ public class LeaveService {
                 throw new AppExceptionBuilder().addError(e.getMessage()).build(); }
 
             newYearPaidLeave.setStartDate(newYear);
-            newYearPaidLeave.setDays(Duration.between(paidLeave.getStartDate(), paidLeave.getEndDate()).toDays());
+            newYearPaidLeave.setDays(countDaysInPaidLeave(newYearPaidLeave.getStartDate(), newYearPaidLeave.getEndDate()));
             if (usedDays - usedDaysPresentYear + newYearPaidLeave.getDays() >
                     workersService.getWorkerFutureFreeDays(workersService.getWorkerDateVars(tmpWorker.getEmployeeVarsId()), enterprise))
                 throw new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE_AMOUNT).build();
@@ -64,13 +73,20 @@ public class LeaveService {
                     .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE).build());
 
             paidLeave.setEndDate(LocalDate.of(LocalDate.now().getYear(), 12, 31));
-            paidLeave.setDays(Duration.between(paidLeave.getStartDate(), paidLeave.getEndDate()).toDays());
+            paidLeave.setDays(countDaysInPaidLeave(paidLeave.getStartDate(), paidLeave.getEndDate()));
         }
         if (usedDaysPresentYear + paidLeave.getDays() >
                 workersService.getWorkerFreeDays(workersService.getWorkerDateVars(tmpWorker.getEmployeeVarsId()), enterprise))
             throw new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE_AMOUNT).build();
         return leaveRepository.createPaidLeave(paidLeave, tmpWorker.getId())
                 .orElseThrow(() -> new AppExceptionBuilder().addError(PaidLeavesMessages.CREATE_FAILURE).build());
+    }
+
+    private Long countDaysInPaidLeave(LocalDate start, LocalDate end){
+        Set<DayOfWeek> weekend = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+        return start.datesUntil(end)
+                .filter(d -> !weekend.contains(d.getDayOfWeek()))
+                .count() + 1;
     }
 
 

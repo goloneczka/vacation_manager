@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class WorkerExtraDays extends TableImpl<WorkerExtraDaysRecord> {
 
-    private static final long serialVersionUID = 2140625252;
+    private static final long serialVersionUID = -1674497532;
 
     /**
      * The reference instance of <code>company.worker_extra_days</code>
@@ -66,6 +66,11 @@ public class WorkerExtraDays extends TableImpl<WorkerExtraDaysRecord> {
      * The column <code>company.worker_extra_days.annual_extra_days</code>.
      */
     public final TableField<WorkerExtraDaysRecord, Integer> ANNUAL_EXTRA_DAYS = createField(DSL.name("annual_extra_days"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>company.worker_extra_days.transitive_days</code>.
+     */
+    public final TableField<WorkerExtraDaysRecord, Integer> TRANSITIVE_DAYS = createField(DSL.name("transitive_days"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * Create a <code>company.worker_extra_days</code> table reference
@@ -147,11 +152,11 @@ public class WorkerExtraDays extends TableImpl<WorkerExtraDaysRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, Integer, Integer, Integer> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<Integer, Integer, Integer, Integer, Integer> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }
