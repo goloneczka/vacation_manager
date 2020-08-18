@@ -130,18 +130,21 @@ public class WorkerRepository {
                 .set(WORKER_EXTRA_DAYS.ANNUAL_EXTRA_DAYS, tmpWorkerExtraDays.getAnnualExtraDays())
                 .set(WORKER_EXTRA_DAYS.EXTRA_DAYS, tmpWorkerExtraDays.getExtraDays())
                 .set(WORKER_EXTRA_DAYS.SENIORITY, tmpWorkerExtraDays.getSeniority())
+                .set(WORKER_EXTRA_DAYS.TRANSITIVE_DAYS, tmpWorkerExtraDays.getTransitiveDays())
                 .where(WORKER_EXTRA_DAYS.ID.eq((int) (long) varsId))
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(WorkerExtraDays.class));
     }
 
+    //      ---     SCHEDULER
     public void setWorkerExtraDaysByScheduler() {
         dsl
                 .update(WORKER_EXTRA_DAYS)
                 .set(WORKER_EXTRA_DAYS.ANNUAL_EXTRA_DAYS, 0)
                 .execute();
     }
+
 
 
 }

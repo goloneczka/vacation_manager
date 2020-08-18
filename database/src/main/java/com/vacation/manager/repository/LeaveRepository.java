@@ -92,13 +92,6 @@ public class LeaveRepository {
                 .map(record -> record.into(PaidLeave.class));
     }
 
-    public void deleteOutdatedLeavesByScheduler(LocalDate time) {
-        dsl.delete(PAID_LEAVE)
-                .where(PAID_LEAVE.END_DATE.lessThan(time))
-                .or(PAID_LEAVE.STATUS.eq("REJECTED"))
-                .execute();
-    }
-
     public int deleteOutdatedLeavesInCompany(String enterprise, LocalDate time) {
         try {
             return dsl.delete(PAID_LEAVE)
@@ -114,5 +107,12 @@ public class LeaveRepository {
         } catch (RuntimeException ex) {
             return -1;
         }
+    }
+
+        //      ---     SCHEDULER
+    public void deleteOutdatedLeavesByScheduler(LocalDate time) {
+        dsl.delete(PAID_LEAVE)
+                .where(PAID_LEAVE.END_DATE.lessThan(time))
+                .execute();
     }
 }

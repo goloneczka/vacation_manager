@@ -1,11 +1,14 @@
 package com.vacation.manager.repository;
 
 import com.vacation.manager.model.Enterprise;
+import com.vacation.manager.model.Worker;
 import org.jooq.DSLContext;
 
 import static com.vacation.manager.jooq.tables.Enterprise.ENTERPRISE;
+import static com.vacation.manager.jooq.tables.Worker.WORKER;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class EnterpriseRepository {
@@ -52,13 +55,6 @@ public class EnterpriseRepository {
                 .fetchOptionalInto(Enterprise.class);
     }
 
-    public void updateRestartByScheduler(LocalDate now) {
-        dsl
-                .update(ENTERPRISE)
-                .set(ENTERPRISE.RESTART_TIME, now)
-                .execute();
-    }
-
     public Optional<Enterprise> setUpdatedTime(String name, LocalDate now) {
         return dsl
                 .update(ENTERPRISE)
@@ -67,5 +63,18 @@ public class EnterpriseRepository {
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(Enterprise.class));
+    }
+
+    //      ---     SCHEDULER
+    public void updateRestartByScheduler(LocalDate now) {
+        dsl
+                .update(ENTERPRISE)
+                .set(ENTERPRISE.RESTART_TIME, now)
+                .execute();
+    }
+
+    public List<Enterprise> getAll() {
+        return dsl.selectFrom(ENTERPRISE)
+                .fetchInto(Enterprise.class);
     }
 }

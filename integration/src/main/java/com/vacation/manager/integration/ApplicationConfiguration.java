@@ -4,6 +4,7 @@ import com.vacation.manager.repository.EnterpriseRepository;
 import com.vacation.manager.repository.LeaveRepository;
 import com.vacation.manager.repository.WorkerRepository;
 import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
 import org.jooq.impl.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,18 @@ public class ApplicationConfiguration {
     public DataSourceConnectionProvider connectionProvider(DataSource dataSource) {
         return new DataSourceConnectionProvider
                 (new TransactionAwareDataSourceProxy(dataSource));
+    }
+
+    @Bean
+    public DefaultConfiguration configuration(DataSourceConnectionProvider connectionProvider) {
+        DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
+        jooqConfiguration.set(connectionProvider);
+
+        jooqConfiguration
+                .set(new DefaultExecuteListenerProvider(new DefaultExecuteListener()));
+        jooqConfiguration.setSQLDialect(SQLDialect.POSTGRES);
+
+        return jooqConfiguration;
     }
 
     @Bean

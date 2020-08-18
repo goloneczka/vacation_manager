@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS company.worker_extra_days
     id                    SERIAL PRIMARY KEY,
     seniority             INTEGER not null,
     extra_days            INTEGER,
-    annual_extra_days     INTEGER
+    annual_extra_days     INTEGER,
+    transitive_days       INTEGER default 0
 );
 
 CREATE TABLE IF NOT EXISTS company.role
