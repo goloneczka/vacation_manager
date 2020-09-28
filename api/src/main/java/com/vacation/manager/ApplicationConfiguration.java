@@ -104,7 +104,7 @@ public class ApplicationConfiguration {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setUsername("vacationmanagerapp@gmail.com");
-        mailSender.setPassword("klopek1432");
+        mailSender.setPassword("Klopek1432*");
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
