@@ -5,14 +5,13 @@ import com.vacation.manager.exception.AppExceptionBuilder;
 import com.vacation.manager.messages.PaidLeavesMessages;
 import com.vacation.manager.model.PaidLeave;
 import com.vacation.manager.model.Worker;
+import com.vacation.manager.model.WorkerLeaveList;
 import com.vacation.manager.model.api.WorkerLeaveApi;
-import com.vacation.manager.model.api.WorkerLeaveListApi;
 import com.vacation.manager.repository.LeaveRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -95,12 +94,12 @@ public class LeaveService {
         return leaveRepository.getPaidLeavesByWorkerId(id);
     }
 
-    public List<WorkerLeaveListApi> getActiveLeavesInEnterprise(Long enterpriseId) {
+    public List<WorkerLeaveList> getActiveLeavesInEnterprise(Long enterpriseId) {
         return leaveRepository.getActivePaidLeavesByWorkerEnterpriseId(enterpriseId);
     }
 
-    public List<PaidLeave> getHistoryLeavesInEnterprise(Long enterpriseId, int page) {
-        List<PaidLeave> reversed = new ArrayList<>();
+    public List<WorkerLeaveList> getHistoryLeavesInEnterprise(Long enterpriseId, int page) {
+        List<WorkerLeaveList> reversed = new ArrayList<>();
         new LinkedList<>(leaveRepository.getHistoryLeavesByWorkerEnterpriseId(enterpriseId, page))
                 .descendingIterator()
                 .forEachRemaining(reversed::add);
