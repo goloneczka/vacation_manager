@@ -12,6 +12,7 @@ import com.vacation.manager.model.api.WorkerExtraDaysApi;
 import com.vacation.manager.model.api.form.RegisterCompanyForm;
 import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.WorkerRepository;
+import com.vacation.manager.service.workers.WorkerContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,61 +20,66 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+
+import static com.vacation.manager.messages.RolesMessages.*;
 
 
 @Service
 public class WorkersService {
 
     private final WorkerRepository workerRepository;
-    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final EmailService emailService;
     private final EnterpriseService enterpriseService;
     private final LeaveService leaveService;
+    private final WorkerContext workerContext;
 
-    public WorkersService(WorkerRepository workerRepository, PasswordEncoder passwordEncoder,
+    public WorkersService(WorkerRepository workerRepository,
                           ModelMapper modelMapper, EmailService emailService, EnterpriseService enterpriseService,
-                          @Lazy LeaveService leaveService) {
+                          @Lazy LeaveService leaveService, WorkerContext workerContext) {
         this.workerRepository = workerRepository;
-        this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.emailService = emailService;
         this.enterpriseService = enterpriseService;
         this.leaveService = leaveService;
+        this.workerContext = workerContext;
     }
 
-
-    private Worker createWorker(Worker worker) {
-        worker.setPassword(passwordEncoder.encode(worker.getPassword()));
-        worker.setEmployeeVarsId(workerRepository.createWorkerVars(Period.between(worker.getHired(), LocalDate.now()).getYears())
-                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_VARS).build()).getId());
-        return workerRepository.createWorker(worker)
-                .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_FAILURE_DUP_KEYS).build());
-    }
 
     @Transactional(rollbackFor = AppException.class)
-    public Worker addCeo(RegisterCompanyForm registerCompanyForm, Long enterpriseId){
+    public Worker addCeo(RegisterCompanyForm registerCompanyForm, Long enterpriseId) {
         Worker tmpWorker = modelMapper.map(registerCompanyForm, Worker.class);
         tmpWorker.setEnterpriseId(enterpriseId);
-        Worker worker = createWorker(tmpWorker);
-        createRoleToWorker(worker.getId().intValue(), Arrays.asList(1, 2, 3));
+        Worker worker = workerContext
+                .findStrategy(CEO)
+                .addEmployee(tmpWorker);
         emailService.sendEmailMessageToNewCeo(worker.getEmail(), worker.getEnterpriseId().intValue());
         return worker;
     }
 
-    private List<RoleWorker> createRoleToWorker(Integer workerId, List<Integer> rolesId) {
-        return rolesId.stream().map( id -> workerRepository.createRoleToWorker(workerId, id)
-                .orElseThrow(() -> new AppExceptionBuilder().addError(RolesMessages.CREATE_FAILURE).build()))
-                .collect(Collectors.toList());
+    @Transactional(rollbackFor = AppException.class)
+    public Worker addEmployee(RegisterEmployeeForm registerEmployeeForm) {
+        Worker tmpWorker = modelMapper.map(registerEmployeeForm, Worker.class);
+        String passwd = alphaNumericString();
+        tmpWorker.setPassword(passwd);
+        Worker worker;
+        if (registerEmployeeForm.getIsHR())
+            worker = workerContext
+                    .findStrategy(HR)
+                    .addEmployee(tmpWorker);
+        else
+            worker = workerContext
+                    .findStrategy(EMPLOYEE)
+                    .addEmployee(tmpWorker);
+
+        emailService.sendEmailToNewEmployee(worker.getEmail(), worker.getEnterpriseId().intValue(), passwd);
+        return worker;
     }
 
-    public Worker getWorkerByEmailAndEnterprise(String email, String enterprise){
+
+    public Worker getWorkerByEmailAndEnterprise(String email, String enterprise) {
         Worker worker = workerRepository.findConfirmedByEmailAndEnterprise(email, enterprise)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build());
         worker.setRoles(workerRepository.getUserRoles(worker.getId()));
@@ -89,19 +95,6 @@ public class WorkersService {
         return workerRepository.getEmployeesByEnterpriseId(enterpriseId);
     }
 
-    @Transactional(rollbackFor = AppException.class)
-    public Worker addEmployee(RegisterEmployeeForm registerEmployeeForm) {
-        Worker tmpWorker = modelMapper.map(registerEmployeeForm, Worker.class);
-        String passwd = alphaNumericString();
-        tmpWorker.setPassword(passwd);
-        Worker worker = createWorker(tmpWorker);
-        if (registerEmployeeForm.getIsHR())
-            createRoleToWorker(worker.getId().intValue(), Arrays.asList(2, 3));
-         else
-            createRoleToWorker(worker.getId().intValue(), Collections.singletonList(3));
-        emailService.sendEmailToNewEmployee(worker.getEmail(), worker.getEnterpriseId().intValue(), passwd);
-        return worker;
-    }
 
     private String alphaNumericString() {
         String AB = "1023456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -125,7 +118,7 @@ public class WorkersService {
         int usedDaysPresentYear = leaveService.getWorkerLeaves(email, enterprise).stream()
                 .filter(tmp -> !tmp.getStatus().equals("REJECTED") && tmp.getEndDate().isBefore(newYear))
                 .mapToInt(tmp -> (int) tmp.getDays()).sum();
-        if(usedDaysPresentYear > getWorkerFreeDays(tmpWorkerExtraDays, enterprise))
+        if (usedDaysPresentYear > getWorkerFreeDays(tmpWorkerExtraDays, enterprise))
             throw new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE_AMMOUNT_DAYS).build();
         return workerRepository.setWorkerExtraDaysById(getWorkerByEmailAndEnterprise(email, enterprise).getEmployeeVarsId(), tmpWorkerExtraDays)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());
@@ -138,7 +131,7 @@ public class WorkersService {
 
     public int getWorkerFutureFreeDays(WorkerExtraDays tmpWED, String enterprise) {
         return enterpriseService.getEnterpriseByName(enterprise).getFreeDays()
-                + tmpWED.getExtraDays() + (tmpWED.getSeniority() >= 10 ? 6 : 0) ;
+                + tmpWED.getExtraDays() + (tmpWED.getSeniority() >= 10 ? 6 : 0);
     }
 
     public Worker setWorker(String mail, String enterprise, WorkerApi workerApi) {

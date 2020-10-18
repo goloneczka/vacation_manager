@@ -2,7 +2,6 @@ package com.vacation.manager.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.vacation.manager.model.PaidLeave;
-import com.vacation.manager.model.WorkerLeaveList;
 import com.vacation.manager.model.api.PaidLeaveApi;
 import com.vacation.manager.model.api.WorkerApi;
 import com.vacation.manager.model.api.WorkerLeaveApi;
@@ -60,7 +59,7 @@ public class LeaveController {
     }
 
     @GetMapping(value = "/past/{enterpriseId}/{page}")
-    public ResponseEntity<List<WorkerLeaveList>> getHistoryLeavesInEnterprise(
+    public ResponseEntity<List<WorkerLeaveListApi>> getHistoryLeavesInEnterprise(
             @PathVariable Long enterpriseId, @PathVariable Integer page) {
 
         return ResponseEntity.ok()

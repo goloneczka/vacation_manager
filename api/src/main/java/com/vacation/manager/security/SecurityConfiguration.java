@@ -11,17 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+
+
+import static com.vacation.manager.messages.RolesMessages.*;
 
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    private final static String CEO = "CEO";
-    private final static String HR = "HR";
-    private final static String EMPLOYEE = "EMPLOYEE";
 
 
     private final UserDetailsServiceImpl userDetailsService;

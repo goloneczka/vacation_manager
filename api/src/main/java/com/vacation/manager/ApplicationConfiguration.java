@@ -12,6 +12,11 @@ import com.vacation.manager.model.api.form.RegisterEmployeeForm;
 import com.vacation.manager.repository.EnterpriseRepository;
 import com.vacation.manager.repository.LeaveRepository;
 import com.vacation.manager.repository.WorkerRepository;
+import com.vacation.manager.service.workers.WorkerContext;
+import com.vacation.manager.service.workers.WorkerType;
+import com.vacation.manager.service.workers.types.CEOService;
+import com.vacation.manager.service.workers.types.EmployeeService;
+import com.vacation.manager.service.workers.types.HRService;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
@@ -22,10 +27,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import javax.sql.DataSource;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -40,9 +48,20 @@ public class ApplicationConfiguration {
         return new DefaultDSLContext(configuration);
     }
 
+    @Bean
+    public DefaultConfiguration configuration(DataSourceConnectionProvider connectionProvider) {
+        DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
+        jooqConfiguration.set(connectionProvider);
+
+        jooqConfiguration
+                .set(new DefaultExecuteListenerProvider(new DefaultExecuteListener()));
+        jooqConfiguration.setSQLDialect(SQLDialect.POSTGRES);
+
+        return jooqConfiguration;
+    }
 
     @Bean
-    public WorkerRepository jokesRepository(DSLContext dsl) {
+    public WorkerRepository workerRepository(DSLContext dsl) {
         return new WorkerRepository(dsl);
     }
 
@@ -113,16 +132,16 @@ public class ApplicationConfiguration {
         return mailSender;
     }
 
-
     @Bean
-    public DefaultConfiguration configuration(DataSourceConnectionProvider connectionProvider) {
-        DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
-        jooqConfiguration.set(connectionProvider);
+    WorkerContext workerContext(WorkerRepository workerRepository, PasswordEncoder passwordEncoder){
+        Set<WorkerType> workerTypes = new HashSet<>();
+        workerTypes.add(new EmployeeService(workerRepository, passwordEncoder));
+        workerTypes.add(new CEOService(workerRepository, passwordEncoder));
+        workerTypes.add(new HRService(workerRepository, passwordEncoder));
 
-        jooqConfiguration
-                .set(new DefaultExecuteListenerProvider(new DefaultExecuteListener()));
-        jooqConfiguration.setSQLDialect(SQLDialect.POSTGRES);
 
-        return jooqConfiguration;
+        return new WorkerContext(workerTypes);
+
     }
+
 }

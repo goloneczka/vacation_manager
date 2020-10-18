@@ -5,7 +5,7 @@ import com.vacation.manager.exception.AppExceptionBuilder;
 import com.vacation.manager.messages.PaidLeavesMessages;
 import com.vacation.manager.model.PaidLeave;
 import com.vacation.manager.model.Worker;
-import com.vacation.manager.model.WorkerLeaveList;
+import com.vacation.manager.model.api.WorkerLeaveListApi;
 import com.vacation.manager.model.api.WorkerLeaveApi;
 import com.vacation.manager.repository.LeaveRepository;
 import org.springframework.stereotype.Service;
@@ -94,12 +94,12 @@ public class LeaveService {
         return leaveRepository.getPaidLeavesByWorkerId(id);
     }
 
-    public List<WorkerLeaveList> getActiveLeavesInEnterprise(Long enterpriseId) {
+    public List<WorkerLeaveListApi> getActiveLeavesInEnterprise(Long enterpriseId) {
         return leaveRepository.getActivePaidLeavesByWorkerEnterpriseId(enterpriseId);
     }
 
-    public List<WorkerLeaveList> getHistoryLeavesInEnterprise(Long enterpriseId, int page) {
-        List<WorkerLeaveList> reversed = new ArrayList<>();
+    public List<WorkerLeaveListApi> getHistoryLeavesInEnterprise(Long enterpriseId, int page) {
+        List<WorkerLeaveListApi> reversed = new ArrayList<>();
         new LinkedList<>(leaveRepository.getHistoryLeavesByWorkerEnterpriseId(enterpriseId, page))
                 .descendingIterator()
                 .forEachRemaining(reversed::add);

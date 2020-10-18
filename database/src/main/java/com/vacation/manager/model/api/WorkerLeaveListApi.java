@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class WorkerLeaveListApi {
 
+    private Long id;
     private String startDate;
     private String endDate;
 
