@@ -1,7 +1,7 @@
 package com.vacation.manager.repository;
 
 import com.vacation.manager.model.PaidLeave;
-import com.vacation.manager.model.WorkerLeaveList;
+import com.vacation.manager.model.api.WorkerLeaveListApi;
 import com.vacation.manager.model.api.WorkerLeaveApi;
 import org.jooq.DSLContext;
 
@@ -46,7 +46,7 @@ public class LeaveRepository {
                 .fetchInto(PaidLeave.class);
     }
 
-    public List<WorkerLeaveList> getActivePaidLeavesByWorkerEnterpriseId(Long enterpriseId) {
+    public List<WorkerLeaveListApi> getActivePaidLeavesByWorkerEnterpriseId(Long enterpriseId) {
         return dsl.select(PAID_LEAVE.ID, PAID_LEAVE.START_DATE, PAID_LEAVE.END_DATE, WORKER.NAME, WORKER.OCCUPATION)
                 .from(PAID_LEAVE)
                 .join(WORKER)
@@ -57,11 +57,11 @@ public class LeaveRepository {
                                 .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))))
                 .and(PAID_LEAVE.STATUS.eq("NEW"))
                 .limit(10)
-                .fetchInto(WorkerLeaveList.class);
+                .fetchInto(WorkerLeaveListApi.class);
 
     }
 
-    public List<WorkerLeaveList> getHistoryLeavesByWorkerEnterpriseId(Long enterpriseId, int page) {
+    public List<WorkerLeaveListApi> getHistoryLeavesByWorkerEnterpriseId(Long enterpriseId, int page) {
         return dsl.select(PAID_LEAVE.ID, PAID_LEAVE.START_DATE, PAID_LEAVE.END_DATE, WORKER.NAME, WORKER.OCCUPATION, PAID_LEAVE.STATUS)
                 .from(PAID_LEAVE)
                 .join(WORKER)
@@ -73,7 +73,7 @@ public class LeaveRepository {
                 .andNot(PAID_LEAVE.STATUS.eq("NEW"))
                 .limit(10)
                 .offset(page * 10)
-                .fetchInto(WorkerLeaveList.class);
+                .fetchInto(WorkerLeaveListApi.class);
     }
 
     public Optional<WorkerLeaveApi> getDetailsById(Long leaveId) {
