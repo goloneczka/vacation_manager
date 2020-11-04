@@ -1,0 +1,15 @@
+{
+    "registerCompanyForm":{
+        "name": "Bot Man",
+        "email": "vacationmanagerapp@gmail.com",
+        "occupation": "CEO",
+        "hired": "2012-09-11",
+        "enterpriseName": "Test Enterprise1",
+        "password": "123456"
+    },
+    "enterpriseApi":{
+        "name": "Test Enterprise1",
+        "freeDays": 20,
+        "restartTime": null
+    }
+}

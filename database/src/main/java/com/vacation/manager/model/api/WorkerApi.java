@@ -17,7 +17,7 @@ public class WorkerApi {
     private String name;
     @Size(min = 2, message = "Wymagane stanowisko pracownika")
     private String occupation;
-    private Long enterpriseId;
+    private String enterpriseName;
     private Long employeeVarsId;
     private List<Role> roles;
     private String hired;

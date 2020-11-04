@@ -28,11 +28,11 @@ public class EmailService {
 
     }
 
-    public void sendEmailMessageToNewCeo(String email, int enterpriseId)  {
+    public void sendEmailMessageToNewCeo(String email, String enterpriseName)  {
         try {
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setSubject("vacation-manager-app");
-            mimeMessageHelper.setText(EmailsMessages.ACTIVATE_MESSAGE(email, enterpriseId, url), true);
+            mimeMessageHelper.setText(EmailsMessages.ACTIVATE_MESSAGE(email, enterpriseName, url), true);
             javaMailSender.send(mimeMessage);
         }
         catch (MessagingException e){
@@ -40,11 +40,11 @@ public class EmailService {
         }
     }
 
-    public void sendEmailToNewEmployee(String email, int enterpriseId, String passwd) {
+    public void sendEmailToNewEmployee(String email, String enterpriseName, String passwd) {
         try {
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setSubject("vacation-manager-app");
-            mimeMessageHelper.setText(EmailsMessages.ACTIVATE_EMPLOYEE_MESSAGE(email, enterpriseId, url, passwd), true);
+            mimeMessageHelper.setText(EmailsMessages.ACTIVATE_EMPLOYEE_MESSAGE(email, enterpriseName, url, passwd), true);
             javaMailSender.send(mimeMessage);
         }
         catch (MessagingException e){

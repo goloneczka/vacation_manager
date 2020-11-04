@@ -32,7 +32,7 @@ public class Controller {
 
     @GetMapping("/eloo")
     public String getSMTH() {
-        return "Empty.JSON";
+        return "Hakuna";
     }
 
 

@@ -14,10 +14,9 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Enterprise extends TableImpl<EnterpriseRecord> {
 
-    private static final long serialVersionUID = 1799870408;
+    private static final long serialVersionUID = 1772526471;
 
     /**
      * The reference instance of <code>company.enterprise</code>
@@ -49,14 +48,9 @@ public class Enterprise extends TableImpl<EnterpriseRecord> {
     }
 
     /**
-     * The column <code>company.enterprise.id</code>.
+     * The column <code>company.enterprise.name</code>.
      */
-    public final TableField<EnterpriseRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('company.enterprise_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>company.enterprise.enterprise_name</code>.
-     */
-    public final TableField<EnterpriseRecord, String> ENTERPRISE_NAME = createField(DSL.name("enterprise_name"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
+    public final TableField<EnterpriseRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
 
     /**
      * The column <code>company.enterprise.free_days</code>.
@@ -112,18 +106,13 @@ public class Enterprise extends TableImpl<EnterpriseRecord> {
     }
 
     @Override
-    public Identity<EnterpriseRecord, Integer> getIdentity() {
-        return Keys.IDENTITY_ENTERPRISE;
-    }
-
-    @Override
     public UniqueKey<EnterpriseRecord> getPrimaryKey() {
         return Keys.ENTERPRISE_PKEY;
     }
 
     @Override
     public List<UniqueKey<EnterpriseRecord>> getKeys() {
-        return Arrays.<UniqueKey<EnterpriseRecord>>asList(Keys.ENTERPRISE_PKEY, Keys.ENTERPRISE_ENTERPRISE_NAME_KEY);
+        return Arrays.<UniqueKey<EnterpriseRecord>>asList(Keys.ENTERPRISE_PKEY);
     }
 
     @Override
@@ -153,11 +142,11 @@ public class Enterprise extends TableImpl<EnterpriseRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, String, Float, Boolean, LocalDate> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row4<String, Float, Boolean, LocalDate> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

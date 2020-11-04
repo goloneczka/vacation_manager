@@ -30,12 +30,12 @@ public class LeaveController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = "/{mail}/{enterprise}")
+    @GetMapping(value = "/{mail}/{enterpriseName}")
     public ResponseEntity<List<WorkerApi>> getWorkerLeaves(
-            @PathVariable String mail, @PathVariable String enterprise) {
+            @PathVariable String mail, @PathVariable String enterpriseName) {
 
         return ResponseEntity.ok()
-                .body(modelMapper.map(leaveService.getWorkerLeaves(mail, enterprise),
+                .body(modelMapper.map(leaveService.getWorkerLeaves(mail, enterpriseName),
                         new TypeReference<List<PaidLeaveApi>>() {
                         }.getType()));
     }
@@ -50,30 +50,30 @@ public class LeaveController {
     }
 
 
-    @GetMapping(value = "/{enterpriseId}")
-    public ResponseEntity<List<WorkerLeaveListApi>> getWorkersLeavesInEnterprise(@PathVariable Long enterpriseId) {
+    @GetMapping(value = "/{enterpriseName}")
+    public ResponseEntity<List<WorkerLeaveListApi>> getUnresolvedByCompanyName(@PathVariable String enterpriseName) {
         return ResponseEntity.ok()
-                .body(modelMapper.map(leaveService.getActiveLeavesInEnterprise(enterpriseId),
+                .body(modelMapper.map(leaveService.getUnresolvedByCompanyName(enterpriseName),
                         new TypeReference<List<WorkerLeaveListApi>>() {
                         }.getType()));
     }
 
-    @GetMapping(value = "/past/{enterpriseId}/{page}")
-    public ResponseEntity<List<WorkerLeaveListApi>> getHistoryLeavesInEnterprise(
-            @PathVariable Long enterpriseId, @PathVariable Integer page) {
+    @GetMapping(value = "/past/{enterpriseName}/{page}")
+    public ResponseEntity<List<WorkerLeaveListApi>> getResolvedByCompanyName(
+            @PathVariable String enterpriseName, @PathVariable Integer page) {
 
         return ResponseEntity.ok()
-                .body(modelMapper.map(leaveService.getHistoryLeavesInEnterprise(enterpriseId, page),
+                .body(modelMapper.map(leaveService.getResolvedByCompanyName(enterpriseName, page),
                         new TypeReference<List<WorkerLeaveListApi>>() {
                         }.getType()));
     }
 
-    @PostMapping(value = "/add/{mail}/{enterprise}")
-    public ResponseEntity<PaidLeaveApi> addWorkerLeaves(@Valid @RequestBody PaidLeaveApi paidLeaveApi,
-                                                        @PathVariable String mail, @PathVariable String enterprise) {
+    @PostMapping(value = "/add/{mail}/{enterpriseName}")
+    public ResponseEntity<PaidLeaveApi> createWorkerLeave(@Valid @RequestBody PaidLeaveApi paidLeaveApi,
+                                                        @PathVariable String mail, @PathVariable String enterpriseName) {
         PaidLeave paidLeave = modelMapper.map(paidLeaveApi, PaidLeave.class);
         return ResponseEntity.ok()
-                .body(modelMapper.map(leaveService.createWorkerLeaves(paidLeave, mail, enterprise), PaidLeaveApi.class));
+                .body(modelMapper.map(leaveService.createWorkerLeaves(paidLeave, mail, enterpriseName), PaidLeaveApi.class));
     }
 
     @PutMapping(value = "/HR/{id}/{status}")
@@ -82,9 +82,9 @@ public class LeaveController {
                 .body(modelMapper.map(leaveService.putLeaveStatus(id, status), PaidLeaveApi.class));
     }
 
-    @DeleteMapping(value = "/CEO/{enterprise}")
-    public ResponseEntity<?> clearLeaves(@PathVariable String enterprise) {
-        leaveService.deleteOutDated(enterprise, LocalDate.now());
+    @DeleteMapping(value = "/CEO/{enterpriseName}")
+    public ResponseEntity<?> clearLeaves(@PathVariable String enterpriseName) {
+        leaveService.deleteOutDated(enterpriseName, LocalDate.now());
         return ResponseEntity
                 .status(ResponseStatus.OK)
                 .body(new HashMap.SimpleEntry<>("success", true));

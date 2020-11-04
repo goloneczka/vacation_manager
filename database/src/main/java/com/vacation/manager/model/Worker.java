@@ -18,7 +18,7 @@ public class Worker {
     private String password;
     private String name;
     private String occupation;
-    private Long enterpriseId;
+    private String enterpriseName;
     private Long employeeVarsId;
     private Boolean confirmed;
     private LocalDate hired;

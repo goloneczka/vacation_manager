@@ -46,7 +46,7 @@ public class LeaveRepository {
                 .fetchInto(PaidLeave.class);
     }
 
-    public List<WorkerLeaveListApi> getActivePaidLeavesByWorkerEnterpriseId(Long enterpriseId) {
+    public List<WorkerLeaveListApi> getUnresolvedByCompanyName(String enterpriseName) {
         return dsl.select(PAID_LEAVE.ID, PAID_LEAVE.START_DATE, PAID_LEAVE.END_DATE, WORKER.NAME, WORKER.OCCUPATION)
                 .from(PAID_LEAVE)
                 .join(WORKER)
@@ -54,14 +54,14 @@ public class LeaveRepository {
                 .where(PAID_LEAVE.EMPLOYEE_ID.in(
                         dsl.select(WORKER.ID)
                                 .from(WORKER)
-                                .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))))
+                                .where(WORKER.ENTERPRISE_NAME.eq(enterpriseName))))
                 .and(PAID_LEAVE.STATUS.eq("NEW"))
                 .limit(10)
                 .fetchInto(WorkerLeaveListApi.class);
 
     }
 
-    public List<WorkerLeaveListApi> getHistoryLeavesByWorkerEnterpriseId(Long enterpriseId, int page) {
+    public List<WorkerLeaveListApi> getResolvedByCompanyName(String enterpriseName, int page) {
         return dsl.select(PAID_LEAVE.ID, PAID_LEAVE.START_DATE, PAID_LEAVE.END_DATE, WORKER.NAME, WORKER.OCCUPATION, PAID_LEAVE.STATUS)
                 .from(PAID_LEAVE)
                 .join(WORKER)
@@ -69,7 +69,7 @@ public class LeaveRepository {
                 .where(PAID_LEAVE.EMPLOYEE_ID.in(
                         dsl.select(WORKER.ID)
                                 .from(WORKER)
-                                .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))))
+                                .where(WORKER.ENTERPRISE_NAME.eq(enterpriseName))))
                 .andNot(PAID_LEAVE.STATUS.eq("NEW"))
                 .limit(10)
                 .offset(page * 10)
@@ -95,17 +95,14 @@ public class LeaveRepository {
                 .map(record -> record.into(PaidLeave.class));
     }
 
-    public int deleteOutdatedLeavesInCompany(String enterprise, LocalDate time) {
+    public int deleteOutdatedLeavesInCompany(String enterpriseName, LocalDate time) {
         try {
             return dsl.delete(PAID_LEAVE)
                     .where(PAID_LEAVE.END_DATE.lessThan(time).or(PAID_LEAVE.STATUS.eq("REJECTED")))
                     .and(PAID_LEAVE.EMPLOYEE_ID.in(
                             dsl.select(WORKER.ID)
                                     .from(WORKER)
-                                    .where(WORKER.ENTERPRISE_ID.eq(
-                                            dsl.select(ENTERPRISE.ID)
-                                                    .from(ENTERPRISE)
-                                                    .where(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))))))
+                                    .where(WORKER.ENTERPRISE_NAME.eq(enterpriseName))))
                     .execute();
         } catch (RuntimeException ex) {
             return -1;

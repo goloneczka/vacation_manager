@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String enterprise = username.substring(username.indexOf("/") + 1);
         String mail = username.substring(0, username.indexOf("/"));
 
-        Worker worker = workerRepository.findConfirmedByEmailAndEnterprise(mail, enterprise)
+        Worker worker = workerRepository.getConfirmedByEmailAndEnterprise(mail, enterprise)
                 .orElseThrow(() -> new UsernameNotFoundException(mail));
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();

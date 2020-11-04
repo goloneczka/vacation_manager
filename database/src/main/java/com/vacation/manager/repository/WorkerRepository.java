@@ -25,15 +25,12 @@ public class WorkerRepository {
     }
 
 
-    public Optional<Worker> findConfirmedByEmailAndEnterprise(String email, String enterprise) {
+    public Optional<Worker> getConfirmedByEmailAndEnterprise(String email, String enterpriseName) {
         return dsl.select()
                 .from(WORKER)
                 .where(WORKER.EMAIL.eq(email))
                 .and(WORKER.CONFIRMED.eq(true))
-                .and(WORKER.ENTERPRISE_ID.eq(
-                        dsl.select(ENTERPRISE.ID)
-                                .from(ENTERPRISE)
-                                .where(ENTERPRISE.ENTERPRISE_NAME.eq(enterprise))))
+                .and(WORKER.ENTERPRISE_NAME.eq(enterpriseName))
                 .fetchOptionalInto(Worker.class);
     }
 
@@ -54,7 +51,7 @@ public class WorkerRepository {
                     .set(WORKER.OCCUPATION, worker.getOccupation())
                     .set(WORKER.EMAIL, worker.getEmail())
                     .set(WORKER.PASSWORD, worker.getPassword())
-                    .set(WORKER.ENTERPRISE_ID, worker.getEnterpriseId().intValue())
+                    .set(WORKER.ENTERPRISE_NAME, worker.getEnterpriseName())
                     .set(WORKER.EMPLOYEE_VARS_ID, worker.getEmployeeVarsId().intValue())
                     .set(WORKER.HIRED, worker.getHired())
                     .returning()
@@ -74,20 +71,20 @@ public class WorkerRepository {
         return Optional.ofNullable(result.into(RoleWorker.class));
     }
 
-    public Optional<Worker> confirmWorker(String mail, Long enterpriseId) {
+    public Optional<Worker> confirmWorker(String mail, String enterpriseName) {
         return dsl
                 .update(WORKER)
                 .set(WORKER.CONFIRMED, true)
-                .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))
+                .where(WORKER.ENTERPRISE_NAME.eq(enterpriseName))
                 .and(WORKER.EMAIL.eq(mail))
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(Worker.class));
     }
 
-    public List<Worker> getEmployeesByEnterpriseId(Long enterpriseId) {
+    public List<Worker> getByEnterpriseName(String enterpriseName) {
         return dsl.selectFrom(WORKER)
-                .where(WORKER.ENTERPRISE_ID.eq((int) (long) enterpriseId))
+                .where(WORKER.ENTERPRISE_NAME.eq( enterpriseName))
                 .and(WORKER.CONFIRMED.eq(true))
                 .fetchInto(Worker.class);
     }

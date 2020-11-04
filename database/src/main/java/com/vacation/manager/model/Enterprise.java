@@ -12,8 +12,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class Enterprise {
 
-    private Long id;
-    private String enterpriseName;
+    private String name;
     private Integer freeDays;
     private Boolean confirmed;
     private LocalDate restartTime;

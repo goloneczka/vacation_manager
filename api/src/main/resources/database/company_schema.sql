@@ -1,25 +1,10 @@
 CREATE SCHEMA IF NOT EXISTS company;
 CREATE TABLE IF NOT EXISTS company.enterprise
 (
-    id                    SERIAL PRIMARY KEY,
-    enterprise_name       VARCHAR(127) not null UNIQUE,
+    name                  VARCHAR(127) PRIMARY KEY not null,
     free_days             real default 20,
     confirmed             boolean default false,
     restart_time          date default null
-);
-
-CREATE TABLE IF NOT EXISTS company.worker
-(
-    id                    SERIAL PRIMARY KEY,
-    email                 VARCHAR(127) not null,
-    enterprise_id         INTEGER references company.enterprise(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    employee_vars_id      INTEGER not null REFERENCES company.worker_extra_days(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    password              VARCHAR(127) not null,
-    name                  VARCHAR(127) not null,
-    occupation            VARCHAR(127) not null,
-    confirmed             boolean default false,
-    hired                 date default CURRENT_DATE,
-    unique (email, enterprise_id)
 );
 
 CREATE TABLE IF NOT EXISTS company.worker_extra_days
@@ -29,6 +14,20 @@ CREATE TABLE IF NOT EXISTS company.worker_extra_days
     extra_days            INTEGER,
     annual_extra_days     INTEGER,
     transitive_days       INTEGER default 0
+);
+
+CREATE TABLE IF NOT EXISTS company.worker
+(
+    id                    SERIAL PRIMARY KEY,
+    email                 VARCHAR(127) not null,
+    enterprise_name       VARCHAR(127) references company.enterprise(name) ON UPDATE CASCADE ON DELETE CASCADE,
+    employee_vars_id      INTEGER not null REFERENCES company.worker_extra_days(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    password              VARCHAR(127) not null,
+    name                  VARCHAR(127) not null,
+    occupation            VARCHAR(127) not null,
+    confirmed             boolean default false,
+    hired                 date default CURRENT_DATE,
+    unique (email, enterprise_name)
 );
 
 CREATE TABLE IF NOT EXISTS company.role
@@ -54,3 +53,8 @@ CREATE TABLE IF NOT EXISTS company.paid_leave
     describe              VARCHAR(1024),
     status                VARCHAR(128) default 'NEW' CHECK (status = 'NEW' OR status = 'ACCEPTED' OR status = 'REJECTED')
 );
+
+
+insert into company.role values (1, 'ROLE_CEO');
+insert into company.role values (2, 'ROLE_HR');
+insert into company.role values (3, 'ROLE_employee');

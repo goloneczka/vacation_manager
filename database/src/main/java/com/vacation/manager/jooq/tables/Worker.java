@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Worker extends TableImpl<WorkerRecord> {
 
-    private static final long serialVersionUID = 1657354949;
+    private static final long serialVersionUID = -1979385275;
 
     /**
      * The reference instance of <code>company.worker</code>
@@ -59,9 +59,14 @@ public class Worker extends TableImpl<WorkerRecord> {
     public final TableField<WorkerRecord, String> EMAIL = createField(DSL.name("email"), org.jooq.impl.SQLDataType.VARCHAR(127).nullable(false), this, "");
 
     /**
-     * The column <code>company.worker.enterprise_id</code>.
+     * The column <code>company.worker.enterprise_name</code>.
      */
-    public final TableField<WorkerRecord, Integer> ENTERPRISE_ID = createField(DSL.name("enterprise_id"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<WorkerRecord, String> ENTERPRISE_NAME = createField(DSL.name("enterprise_name"), org.jooq.impl.SQLDataType.VARCHAR(127), this, "");
+
+    /**
+     * The column <code>company.worker.employee_vars_id</code>.
+     */
+    public final TableField<WorkerRecord, Integer> EMPLOYEE_VARS_ID = createField(DSL.name("employee_vars_id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>company.worker.password</code>.
@@ -87,11 +92,6 @@ public class Worker extends TableImpl<WorkerRecord> {
      * The column <code>company.worker.hired</code>.
      */
     public final TableField<WorkerRecord, LocalDate> HIRED = createField(DSL.name("hired"), org.jooq.impl.SQLDataType.LOCALDATE.defaultValue(org.jooq.impl.DSL.field("CURRENT_DATE", org.jooq.impl.SQLDataType.LOCALDATE)), this, "");
-
-    /**
-     * The column <code>company.worker.employee_vars_id</code>.
-     */
-    public final TableField<WorkerRecord, Integer> EMPLOYEE_VARS_ID = createField(DSL.name("employee_vars_id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>company.worker</code> table reference
@@ -143,16 +143,16 @@ public class Worker extends TableImpl<WorkerRecord> {
 
     @Override
     public List<UniqueKey<WorkerRecord>> getKeys() {
-        return Arrays.<UniqueKey<WorkerRecord>>asList(Keys.WORKER_PKEY, Keys.WORKER_EMAIL_ENTERPRISE_ID_KEY);
+        return Arrays.<UniqueKey<WorkerRecord>>asList(Keys.WORKER_PKEY, Keys.WORKER_EMAIL_ENTERPRISE_NAME_KEY);
     }
 
     @Override
     public List<ForeignKey<WorkerRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<WorkerRecord, ?>>asList(Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY, Keys.WORKER__WORKER_EMPLOYEE_VARS_ID_FKEY);
+        return Arrays.<ForeignKey<WorkerRecord, ?>>asList(Keys.WORKER__WORKER_ENTERPRISE_NAME_FKEY, Keys.WORKER__WORKER_EMPLOYEE_VARS_ID_FKEY);
     }
 
     public Enterprise enterprise() {
-        return new Enterprise(this, Keys.WORKER__WORKER_ENTERPRISE_ID_FKEY);
+        return new Enterprise(this, Keys.WORKER__WORKER_ENTERPRISE_NAME_FKEY);
     }
 
     public WorkerExtraDays workerExtraDays() {
@@ -190,7 +190,7 @@ public class Worker extends TableImpl<WorkerRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Integer, String, Integer, String, String, String, Boolean, LocalDate, Integer> fieldsRow() {
+    public Row9<Integer, String, String, Integer, String, String, String, Boolean, LocalDate> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 }

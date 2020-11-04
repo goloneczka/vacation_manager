@@ -5,6 +5,7 @@ import com.vacation.manager.repository.WorkerRepository;
 import com.vacation.manager.service.workers.WorkerType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static com.vacation.manager.messages.RolesMessages.HR;
@@ -18,7 +19,7 @@ public class HRService extends WorkerTypeService implements WorkerType {
     @Override
     public Worker addEmployee(Worker tmpWorker) {
         Worker worker = createWorker(tmpWorker);
-        createRoleToWorker(worker.getId().intValue(), Collections.singletonList(3));
+        createRoleToWorker(worker.getId().intValue(), Arrays.asList( 2, 3));
         return worker;
     }
 

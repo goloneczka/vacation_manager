@@ -38,9 +38,9 @@ public class ScheduledLeave {
 
     private void setWorkersTransitiveDays(LocalDate now){
         enterpriseRepository.getAll().forEach(enterprise -> {
-            workerRepository.getEmployeesByEnterpriseId(enterprise.getId()).forEach(workerInEnterprise -> {
+            workerRepository.getByEnterpriseName(enterprise.getName()).forEach(workerInEnterprise -> {
                 WorkerExtraDays tmpWorkerExtraDays = workerRepository.getWorkerExtraDaysById(workerInEnterprise.getEmployeeVarsId()).get();
-                int diff = getWorkerFreeDays(tmpWorkerExtraDays, enterprise.getEnterpriseName()) - getAmountUsedDays(now, workerInEnterprise.getId());
+                int diff = getWorkerFreeDays(tmpWorkerExtraDays, enterprise.getName()) - getAmountUsedDays(now, workerInEnterprise.getId());
                 tmpWorkerExtraDays.setTransitiveDays(Math.max(diff, 0));
                 workerRepository.setWorkerExtraDaysById(tmpWorkerExtraDays.getId(), tmpWorkerExtraDays);
             });

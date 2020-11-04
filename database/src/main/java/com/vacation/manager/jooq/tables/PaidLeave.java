@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PaidLeave extends TableImpl<PaidLeaveRecord> {
 
-    private static final long serialVersionUID = 1596367124;
+    private static final long serialVersionUID = -445401632;
 
     /**
      * The reference instance of <code>company.paid_leave</code>
@@ -83,7 +83,7 @@ public class PaidLeave extends TableImpl<PaidLeaveRecord> {
     /**
      * The column <code>company.paid_leave.status</code>.
      */
-    public final TableField<PaidLeaveRecord, String> STATUS = createField(DSL.name("status"), org.jooq.impl.SQLDataType.VARCHAR(127).defaultValue(org.jooq.impl.DSL.field("'NEW'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<PaidLeaveRecord, String> STATUS = createField(DSL.name("status"), org.jooq.impl.SQLDataType.VARCHAR(128).defaultValue(org.jooq.impl.DSL.field("'NEW'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     /**
      * Create a <code>company.paid_leave</code> table reference
@@ -150,7 +150,7 @@ public class PaidLeave extends TableImpl<PaidLeaveRecord> {
     @Override
     public List<Check<PaidLeaveRecord>> getChecks() {
         return Arrays.<Check<PaidLeaveRecord>>asList(
-              Internal.createCheck(this, DSL.name("check_status"), "((((status)::text = 'NEW'::text) OR ((status)::text = 'ACCEPTED'::text) OR ((status)::text = 'REJECTED'::text)))", true)
+              Internal.createCheck(this, DSL.name("paid_leave_status_check"), "((((status)::text = 'NEW'::text) OR ((status)::text = 'ACCEPTED'::text) OR ((status)::text = 'REJECTED'::text)))", true)
         );
     }
 
