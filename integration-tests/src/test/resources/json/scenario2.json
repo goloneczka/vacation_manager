@@ -1,0 +1,19 @@
+{
+  "RegisterEmployeeForm":{
+    "name": "Bot Employee",
+    "email": "fakeMail1998@wp.pl",
+    "occupation": "Casual Bot",
+    "hired": "2012-09-11",
+    "isHR": false,
+    "enterpriseName": "Test Enterprise1"
+  },
+  "containsWorkerApi": {
+    "name": "Bot Employee",
+    "email": "fakeMail1998@wp.pl",
+    "occupation": "Casual Bot",
+    "hired": "2012-09-11",
+    "enterpriseName": "Test Enterprise1",
+    "roles": [{"id": 3, "name": "ROLE_employee"}],
+    "employeeVarsId": "#number"
+  }
+}

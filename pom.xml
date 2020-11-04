@@ -7,6 +7,8 @@
     <modules>
         <module>api</module>
         <module>database</module>
+        <module>integration</module>
+        <module>integration-tests</module>
     </modules>
 
     <parent>
@@ -33,6 +35,8 @@
     <jooq.version>3.13.1</jooq.version>
     <model-mapper.version>2.3.7</model-mapper.version>
     <email.version>2.2.6.RELEASE</email.version>
+    <karate.version>0.9.5</karate.version>
+    <cucumber.version>3.8.0</cucumber.version>
   </properties>
 
 

@@ -1,26 +1,12 @@
 server:
-  port: 8081
+  port: 9091
 
+app:
+  url: "http://localhost:8080"
 
 # Database Properties
 spring:
   datasource:
-    driver-class-name: "org.postgresql.Driver"
-    jdbc-url: "jdbc:postgresql://localhost:3307/vacation-manager-test"
+    url: "jdbc:postgresql://localhost:3307/vacation-manager-karate-test"
     username: "postgres"
     password: "klopek1432"
-  # Hibernate Properties
-  # The SQL dialect makes Hibernate generate better SQL for the chosen database
-
-  jpa:
-    properties:
-      hibernate:
-        dialect: "org.hibernate.dialect.PostgreSQLDialect"
-
-      # Hibernate ddl auto (create, create-drop, validate, update)
-        ddl-auto: "update"
-
-
-application:
-  models:
-    path: "com.vacation.manager.model"

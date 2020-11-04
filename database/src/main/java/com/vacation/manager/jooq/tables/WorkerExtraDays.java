@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class WorkerExtraDays extends TableImpl<WorkerExtraDaysRecord> {
 
-    private static final long serialVersionUID = -1674497532;
+    private static final long serialVersionUID = -1779461366;
 
     /**
      * The reference instance of <code>company.worker_extra_days</code>
@@ -60,12 +60,12 @@ public class WorkerExtraDays extends TableImpl<WorkerExtraDaysRecord> {
     /**
      * The column <code>company.worker_extra_days.extra_days</code>.
      */
-    public final TableField<WorkerExtraDaysRecord, Integer> EXTRA_DAYS = createField(DSL.name("extra_days"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<WorkerExtraDaysRecord, Integer> EXTRA_DAYS = createField(DSL.name("extra_days"), org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>company.worker_extra_days.annual_extra_days</code>.
      */
-    public final TableField<WorkerExtraDaysRecord, Integer> ANNUAL_EXTRA_DAYS = createField(DSL.name("annual_extra_days"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<WorkerExtraDaysRecord, Integer> ANNUAL_EXTRA_DAYS = createField(DSL.name("annual_extra_days"), org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>company.worker_extra_days.transitive_days</code>.

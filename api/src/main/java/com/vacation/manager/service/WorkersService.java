@@ -40,7 +40,7 @@ public class WorkersService {
                           ModelMapper modelMapper, EmailService emailService, EnterpriseService enterpriseService,
                           @Lazy LeaveService leaveService, WorkerContext workerContext) {
         this.workerRepository = workerRepository;
-        this.modelMapper = modelMapper;
+        this.modelMapper = modelMapper;     //TODO - REPLACE TO CONTROLLER ??
         this.emailService = emailService;
         this.enterpriseService = enterpriseService;
         this.leaveService = leaveService;
@@ -49,18 +49,17 @@ public class WorkersService {
 
 
     @Transactional(rollbackFor = AppException.class)
-    public Worker addCeo(RegisterCompanyForm registerCompanyForm, Long enterpriseId) {
+    public Worker createCeo(RegisterCompanyForm registerCompanyForm) {
         Worker tmpWorker = modelMapper.map(registerCompanyForm, Worker.class);
-        tmpWorker.setEnterpriseId(enterpriseId);
         Worker worker = workerContext
                 .findStrategy(CEO)
                 .addEmployee(tmpWorker);
-        emailService.sendEmailMessageToNewCeo(worker.getEmail(), worker.getEnterpriseId().intValue());
+        emailService.sendEmailMessageToNewCeo(worker.getEmail(), worker.getEnterpriseName());
         return worker;
     }
 
     @Transactional(rollbackFor = AppException.class)
-    public Worker addEmployee(RegisterEmployeeForm registerEmployeeForm) {
+    public Worker createEmployee(RegisterEmployeeForm registerEmployeeForm) {
         Worker tmpWorker = modelMapper.map(registerEmployeeForm, Worker.class);
         String passwd = alphaNumericString();
         tmpWorker.setPassword(passwd);
@@ -74,25 +73,25 @@ public class WorkersService {
                     .findStrategy(EMPLOYEE)
                     .addEmployee(tmpWorker);
 
-        emailService.sendEmailToNewEmployee(worker.getEmail(), worker.getEnterpriseId().intValue(), passwd);
+        emailService.sendEmailToNewEmployee(worker.getEmail(), worker.getEnterpriseName(), passwd);
         return worker;
     }
 
 
     public Worker getWorkerByEmailAndEnterprise(String email, String enterprise) {
-        Worker worker = workerRepository.findConfirmedByEmailAndEnterprise(email, enterprise)
+        Worker worker = workerRepository.getConfirmedByEmailAndEnterprise(email, enterprise)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build());
         worker.setRoles(workerRepository.getUserRoles(worker.getId()));
         return worker;
     }
 
-    public Worker confirmWorker(String mail, Long enterpriseId) {
-        return workerRepository.confirmWorker(mail, enterpriseId)
+    public Worker confirmWorker(String mail, String enterpriseName) {
+        return workerRepository.confirmWorker(mail, enterpriseName)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.CREATE_CONFIRM_FAILURE).build());
     }
 
-    public List<Worker> getEmployeesInCompany(Long enterpriseId) {
-        return workerRepository.getEmployeesByEnterpriseId(enterpriseId);
+    public List<Worker> getByEnterpriseName(String enterpriseName) {
+        return workerRepository.getByEnterpriseName(enterpriseName);
     }
 
 
@@ -136,7 +135,7 @@ public class WorkersService {
 
     public Worker setWorker(String mail, String enterprise, WorkerApi workerApi) {
         Worker tmpWorker = modelMapper.map(workerApi, Worker.class);
-        Long id = workerRepository.findConfirmedByEmailAndEnterprise(mail, enterprise)
+        Long id = workerRepository.getConfirmedByEmailAndEnterprise(mail, enterprise)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.NOT_FOUND).build()).getId();
         return workerRepository.setWorker(id, tmpWorker)
                 .orElseThrow(() -> new AppExceptionBuilder().addError(WorkersMessages.UPDATE_FAILURE).build());

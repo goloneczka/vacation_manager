@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 public class RegisterEmployeeForm extends  RegisterTemplate{
 
     private Boolean isHR;
-    private Integer enterpriseId;
+    private String enterpriseName;
 
 
     public RegisterEmployeeForm() { }

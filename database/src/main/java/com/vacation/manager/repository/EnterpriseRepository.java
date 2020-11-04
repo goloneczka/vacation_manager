@@ -22,7 +22,7 @@ public class EnterpriseRepository {
     public Optional<Enterprise> createEnterprise(Enterprise enterprise) {
         try {
             return Optional.ofNullable(dsl.insertInto(ENTERPRISE)
-                    .set(ENTERPRISE.ENTERPRISE_NAME, enterprise.getEnterpriseName())
+                    .set(ENTERPRISE.NAME, enterprise.getName())
                     .returning()
                     .fetchOne()
                     .into(Enterprise.class));
@@ -32,34 +32,29 @@ public class EnterpriseRepository {
 
     }
 
-    public Optional<Enterprise> confirmEnterprise(Long enterpriseId) {
+    public Optional<Enterprise> confirmEnterprise(String enterpriseName) {
         return dsl
                 .update(ENTERPRISE)
                 .set(ENTERPRISE.CONFIRMED, true)
-                .where(ENTERPRISE.ID.eq((int) (long) enterpriseId))
+                .where(ENTERPRISE.NAME.eq(enterpriseName))
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(Enterprise.class));
 
     }
 
-    public Optional<Enterprise> getEnterprise(Long enterpriseId) {
-        return dsl.selectFrom(ENTERPRISE)
-                .where(ENTERPRISE.ID.eq((int) (long) enterpriseId))
-                .fetchOptionalInto(Enterprise.class);
-    }
 
     public Optional<Enterprise> getEnterpriseByName(String name) {
         return dsl.selectFrom(ENTERPRISE)
-                .where(ENTERPRISE.ENTERPRISE_NAME.eq(name))
+                .where(ENTERPRISE.NAME.eq(name))
                 .fetchOptionalInto(Enterprise.class);
     }
 
-    public Optional<Enterprise> setUpdatedTime(String name, LocalDate now) {
+    public Optional<Enterprise> setUpdatedTime(String enterpriseName, LocalDate now) {
         return dsl
                 .update(ENTERPRISE)
                 .set(ENTERPRISE.RESTART_TIME, now)
-                .where(ENTERPRISE.ENTERPRISE_NAME.eq(name))
+                .where(ENTERPRISE.NAME.eq(enterpriseName))
                 .returning()
                 .fetchOptional()
                 .map(record -> record.into(Enterprise.class));

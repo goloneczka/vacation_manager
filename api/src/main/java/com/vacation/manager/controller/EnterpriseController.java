@@ -33,25 +33,19 @@ public class EnterpriseController {
 
     @PostMapping("/enterprise")
     public ResponseEntity<WorkerApi> createEnterprise(@Valid @RequestBody RegisterCompanyForm registerCompanyForm) {
-        Enterprise enterprise = enterpriseService.createEnterprise(modelMapper.map(registerCompanyForm, Enterprise.class));
-        Worker worker = workersService.addCeo(registerCompanyForm, enterprise.getId());
+        enterpriseService.createEnterprise(modelMapper.map(registerCompanyForm, Enterprise.class));
+        Worker worker = workersService.createCeo(registerCompanyForm);
         return ResponseEntity.ok().body(modelMapper.map(worker, WorkerApi.class));
     }
 
-    @PutMapping(value = "/confirm/{mail}/{enterpriseId}")
+    @PutMapping(value = "/confirm/{mail}/{enterpriseName}")
     @Transactional(rollbackFor = AppException.class)
-    public ResponseEntity<WorkerApi> confirmEnterpriseAndCeo(@PathVariable String mail, @PathVariable Long enterpriseId) {
-        enterpriseService.confirmEnterprise(enterpriseId);
+    public ResponseEntity<WorkerApi> confirmEnterpriseAndCeo(@PathVariable String mail, @PathVariable String enterpriseName) {
+        enterpriseService.confirmEnterprise(enterpriseName);
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.confirmWorker(mail, enterpriseId), WorkerApi.class));
+                .body(modelMapper.map(workersService.confirmWorker(mail, enterpriseName), WorkerApi.class));
     }
 
-    @GetMapping(value = "/enterprise/{Id}")
-    public ResponseEntity<EnterpriseApi> getEnterpriseById(@PathVariable Long Id) {
-        return ResponseEntity.ok()
-                .body(modelMapper.map(enterpriseService.getEnterpriseById(Id), EnterpriseApi.class));
-
-    }
 
     @GetMapping(value = "/{name}")
     public ResponseEntity<EnterpriseApi> getEnterpriseByName(@PathVariable String name) {

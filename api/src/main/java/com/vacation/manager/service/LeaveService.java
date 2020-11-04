@@ -94,13 +94,13 @@ public class LeaveService {
         return leaveRepository.getPaidLeavesByWorkerId(id);
     }
 
-    public List<WorkerLeaveListApi> getActiveLeavesInEnterprise(Long enterpriseId) {
-        return leaveRepository.getActivePaidLeavesByWorkerEnterpriseId(enterpriseId);
+    public List<WorkerLeaveListApi> getUnresolvedByCompanyName(String enterpriseName) {
+        return leaveRepository.getUnresolvedByCompanyName(enterpriseName);
     }
 
-    public List<WorkerLeaveListApi> getHistoryLeavesInEnterprise(Long enterpriseId, int page) {
+    public List<WorkerLeaveListApi> getResolvedByCompanyName(String enterpriseName, int page) {
         List<WorkerLeaveListApi> reversed = new ArrayList<>();
-        new LinkedList<>(leaveRepository.getHistoryLeavesByWorkerEnterpriseId(enterpriseId, page))
+        new LinkedList<>(leaveRepository.getResolvedByCompanyName(enterpriseName, page))
                 .descendingIterator()
                 .forEachRemaining(reversed::add);
         return reversed;
@@ -120,9 +120,9 @@ public class LeaveService {
 
 
     @Transactional(rollbackFor = AppException.class)
-    public void deleteOutDated(String enterprise, LocalDate now) {
-        if (leaveRepository.deleteOutdatedLeavesInCompany(enterprise, now) == -1)
+    public void deleteOutDated(String enterpriseName, LocalDate now) {
+        if (leaveRepository.deleteOutdatedLeavesInCompany(enterpriseName, now) == -1)
             throw new AppExceptionBuilder().addError(PaidLeavesMessages.UPDATE_FAILURE).build();
-        enterpriseService.updateRestart(enterprise, now);
+        enterpriseService.updateRestart(enterpriseName, now);
     }
 }

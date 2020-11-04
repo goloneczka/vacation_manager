@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class EnterpriseApi {
 
-    private String enterpriseName;
+    private String name;
     private Integer freeDays;
     private String restartTime;
 

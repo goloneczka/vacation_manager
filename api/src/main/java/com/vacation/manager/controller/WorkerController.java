@@ -26,40 +26,40 @@ public class WorkerController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = "/{mail}/{enterprise}")
+    @GetMapping(value = "/{mail}/{enterpriseName}")
     public ResponseEntity<WorkerApi> getWorkerByEmailAndEnterprise(
-            @PathVariable String mail, @PathVariable String enterprise) {
+            @PathVariable String mail, @PathVariable String enterpriseName) {
 
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.getWorkerByEmailAndEnterprise(mail, enterprise), WorkerApi.class));
+                .body(modelMapper.map(workersService.getWorkerByEmailAndEnterprise(mail, enterpriseName), WorkerApi.class));
     }
 
-    @PutMapping(value = "/{mail}/{enterprise}")
+    @PutMapping(value = "/{mail}/{enterpriseName}")
     public ResponseEntity<WorkerApi> setWorker(
-            @PathVariable String mail, @PathVariable String enterprise,
+            @PathVariable String mail, @PathVariable String enterpriseName,
             @Valid @RequestBody WorkerApi workerApi) {
 
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.setWorker(mail, enterprise, workerApi), WorkerApi.class));
+                .body(modelMapper.map(workersService.setWorker(mail, enterpriseName, workerApi), WorkerApi.class));
     }
 
-    @GetMapping(value = "/HR/{enterpriseId}")
-    public ResponseEntity<List<WorkerApi>> getEmployeesInCompany(@PathVariable Long enterpriseId) {
+    @GetMapping(value = "/HR/{enterpriseName}")
+    public ResponseEntity<List<WorkerApi>> getEmployeesInCompany(@PathVariable String enterpriseName) {
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.getEmployeesInCompany(enterpriseId),
+                .body(modelMapper.map(workersService.getByEnterpriseName(enterpriseName),
                         new TypeReference<List<WorkerApi>>() {}.getType()));
     }
 
     @PostMapping(value = "/CEO/add")
-    public ResponseEntity<WorkerApi> addEmployee(@Valid @RequestBody RegisterEmployeeForm registerEmployeeForm) {
+    public ResponseEntity<WorkerApi> createEmployee(@Valid @RequestBody RegisterEmployeeForm registerEmployeeForm) {
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.addEmployee(registerEmployeeForm), WorkerApi.class));
+                .body(modelMapper.map(workersService.createEmployee(registerEmployeeForm), WorkerApi.class));
     }
 
-    @PutMapping(value = "/confirm/{mail}/{enterpriseId}")
-    public ResponseEntity<WorkerApi> confirmEnterpriseAndCeo(@PathVariable String mail, @PathVariable Long enterpriseId) {
+    @PutMapping(value = "/confirm/{mail}/{enterpriseName}")
+    public ResponseEntity<WorkerApi> confirmEmployee(@PathVariable String mail, @PathVariable String enterpriseName) {
         return ResponseEntity.ok()
-                .body(modelMapper.map(workersService.confirmWorker(mail, enterpriseId), WorkerApi.class));
+                .body(modelMapper.map(workersService.confirmWorker(mail, enterpriseName), WorkerApi.class));
     }
 
     @GetMapping(value = "/employee/{varsId}")
@@ -68,13 +68,13 @@ public class WorkerController {
                 .body(modelMapper.map(workersService.getWorkerDateVars(varsId), WorkerExtraDaysApi.class));
     }
 
-    @PutMapping(value = "/employee/{email}/{enterprise}")
+    @PutMapping(value = "/employee/{email}/{enterpriseName}")
     public ResponseEntity<WorkerExtraDaysApi> setWorkerVars(
             @PathVariable String email,
-            @Valid @RequestBody WorkerExtraDaysApi workerExtraDaysApi, @PathVariable String enterprise) {
+            @Valid @RequestBody WorkerExtraDaysApi workerExtraDaysApi, @PathVariable String enterpriseName) {
 
         return ResponseEntity.ok()
                 .body(modelMapper.map(
-                        workersService.setWorkerDataVars(email, workerExtraDaysApi, enterprise), WorkerExtraDaysApi.class));
+                        workersService.setWorkerDataVars(email, workerExtraDaysApi, enterpriseName), WorkerExtraDaysApi.class));
     }
 }

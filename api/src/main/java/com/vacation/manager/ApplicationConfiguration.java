@@ -114,6 +114,10 @@ public class ApplicationConfiguration {
             mapping.map(RegisterCompanyForm::getHired, Worker::setHiredFromString);
         });
 
+        mapper.typeMap(RegisterCompanyForm.class, Enterprise.class).addMappings(mapping -> {
+            mapping.map(RegisterCompanyForm::getEnterpriseName, Enterprise::setName);
+        });
+
         return mapper;
     }
 
