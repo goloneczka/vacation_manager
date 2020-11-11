@@ -47,7 +47,7 @@ public class LeaveRepository {
     }
 
     public List<WorkerLeaveListApi> getUnresolvedByCompanyName(String enterpriseName) {
-        return dsl.select(PAID_LEAVE.ID, PAID_LEAVE.START_DATE, PAID_LEAVE.END_DATE, WORKER.NAME, WORKER.OCCUPATION)
+        return dsl.select(PAID_LEAVE.ID, PAID_LEAVE.START_DATE, PAID_LEAVE.END_DATE, WORKER.NAME, WORKER.OCCUPATION, PAID_LEAVE.STATUS)
                 .from(PAID_LEAVE)
                 .join(WORKER)
                 .on(WORKER.ID.eq(PAID_LEAVE.EMPLOYEE_ID))
