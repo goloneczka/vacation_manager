@@ -12,7 +12,6 @@ public class WorkerLeaveApi extends WorkerLeaveListApi {
 
     private String describe;
     private float days;
-    private String status;
 
 
     public WorkerLeaveApi() { }
